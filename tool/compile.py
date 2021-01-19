@@ -13,7 +13,7 @@ def checkcpp(filename):
     return False
 
 def checkfile(filename):
-    if os.path.isfile(defaultpath+"/"+filename):
+    if os.path.isfile(filename):
         return True
     return False
 #print checkfile("test.cpp")
@@ -23,6 +23,7 @@ def getautofile():
     newfiletime = 0.0
     g = os.listdir(defaultpath)
     for file_name in g:
+        file_name = defaultpath + "/" + file_name
         if os.path.isdir(file_name):
             continue
         if os.stat(file_name).st_mtime > newfiletime:
@@ -34,7 +35,7 @@ def getautofile():
 #print getautofile()
 
 def docompile(filename):
-    cmd = "g++ -g ./" + filename + " -std=c++11 -g"
+    cmd = "g++ -g " + filename + " -std=c++11 -g"
     print cmd
     res = commands.getstatusoutput(cmd)
     if res[0] !=0:
@@ -53,7 +54,6 @@ if __name__=='__main__':
     elif len(sys.argv) ==2:
         filename = sys.argv[1]
     if checkfile(filename):
-        print "ready to compile: " + filename
         docompile(filename)
     else:
         print sys.argv

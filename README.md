@@ -3,9 +3,9 @@
 
 # 用法 c++
 ## 设置alias
-alias cc='sh  /root/levelup/tool/cc.sh'
-alias zz="sh  /root/levelup/tool/zz.sh"
-## 使用
-alias-cc 用于编译和运行当前文件夹最后编译的.cpp文件
-alias-zz 将当前文件夹的所有cpp归档，避免看不清
+`alias cc='sh  /root/levelup/tool/cc.sh'`
+`alias zz="sh  /root/levelup/tool/zz.sh"`
+## 编译命令cc
+`shell cc`命令会编译/root/leetcode/cpp/命令下的最新的.cpp文件，并且生成a.out二进制到当前路径并自动执行
+`shell zz`命令会将当前路径下的`a.out`二进制文件清除，并将`/root/leetcode/cpp/`路径下的所有`.cpp`文件归档到`/root/leetcode/cpp/zip_cpp`中
 
