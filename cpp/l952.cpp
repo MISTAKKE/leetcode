@@ -8,24 +8,18 @@ description:
 */
 
 //Class Solution
-class Solution {
+class Solution
+{
 public:
-    int largestComponentSize(vector<int>& A)
+    int largestComponentSize(vector<int> &A)
     {
         int i = 1;
-
     }
 };
-
-
-
-
-
 
 int main()
 {
     Solution A;
-
 
     return 0;
 }
