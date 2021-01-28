@@ -32,6 +32,14 @@ void print(const Type& arg, const Types&... args)
     print(args...);
 }
 
+template<typename T1, typename T2>void show(const map<T1, T2> mp)
+{
+    for(auto c:mp)
+    {
+        cout << setw(6) << c.first << ":" << c.second <<endl;
+    }
+    cout << endl;
+}
 
 template<typename T>void show(const stack<T> st2)
 {
