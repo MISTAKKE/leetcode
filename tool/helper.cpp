@@ -82,6 +82,17 @@ template<typename T>void show(const queue<T> q)
     cout << endl;
 }
 
+
+template<typename T>void show(const set<T> q)
+{
+    set<T> q2 = q;
+    for(auto iter = q.begin();iter!=q.end(); ++iter)
+    {
+        cout << setw(6) << *iter << " ";
+    }
+    cout << endl;
+}
+
 template<class T1, class T2>
 ostream& operator<<(ostream &out, const pair<T1, T2> &_)
 {
