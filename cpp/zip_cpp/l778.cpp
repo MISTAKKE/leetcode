@@ -121,12 +121,141 @@ public:
     }
 };
 
+class Solution3 //dijkstra
+{
+public:
+    class Node
+    {
+    public:
+        int x;
+        int y;
+        int val;
+        Node(int x_, int y_, int val_) : x(x_), y(y_), val(val_){};
+        bool operator<(const Node &b) const
+        {
+            return val > b.val;
+        }
+    };
+    bool isok(int x, int y, int n)
+    {
+        if (x < 0 || y < 0 || x >= n || y >= n)
+            return false;
+        return true;
+    }
+    vector<int> dx{1, 0, -1, 0};
+    vector<int> dy{0, 1, 0, -1};
+    int swimInWater(vector<vector<int>> &grid)
+    {
+        int n = grid.size();
+        priority_queue<Node, vector<Node>, less<Node>> q;
+        vector<vector<int>> score(n, vector<int>(n, 0));
+        vector<vector<int>> visited(n, vector<int>(n, false));
+        q.push(Node(0, 0, grid[0][0]));
+        score[0][0] = grid[0][0];
+        while (!q.empty())
+        {
+            Node node = q.top();
+            q.pop();
+            if (node.x == n - 1 && node.y == n - 1)
+            {
+                return score[n - 1][n - 1];
+            }
+            visited[node.x][node.y] = true;
+            for (int i = 0; i < 4; ++i)
+            {
+                int nx = node.x + dx[i];
+                int ny = node.y + dy[i];
+                if (isok(nx, ny, n) && !visited[nx][ny])
+                {
+                    score[nx][ny] = max(score[node.x][node.y], grid[nx][ny]);
+                    q.push(Node(nx, ny, grid[nx][ny]));
+                }
+            }
+        }
+        return 0;
+    }
+};
+
+class Solution //bfs + 二分
+{
+public:
+    class Node
+    {
+    public:
+        int x;
+        int y;
+        Node(int x_, int y_) : x(x_), y(y_){};
+    };
+    bool isok(int x, int y, int n)
+    {
+        if (x < 0 || y < 0 || x >= n || y >= n)
+            return false;
+        return true;
+    }
+    vector<int> dx{1, 0, -1, 0};
+    vector<int> dy{0, 1, 0, -1};
+    bool checkok(vector<vector<int>> &grid, int mid)
+    {
+        stack<Node> st;
+        st.push(Node(0, 0));
+        vector<vector<bool>> visited(grid.size(), vector<bool>(grid.size(), false));
+        while (!st.empty())
+        {
+            Node p = st.top();
+            st.pop();
+            for (int i = 0; i < 4; ++i)
+            {
+                int nx = p.x + dx[i];
+                int ny = p.y + dy[i];
+                if (isok(nx, ny, grid.size()) && grid[nx][ny] <= mid && !visited[nx][ny])
+                {
+                    if (nx == grid.size() - 1 && ny == grid.size() - 1)
+                    {
+                        return true;
+                    }
+                    st.push(Node(nx, ny));
+                    visited[nx][ny] = true;
+                }
+            }
+        }
+        return false;
+    }
+    int swimInWater(vector<vector<int>> &grid)
+    {
+        int n = grid.size();
+        int left = max(grid[0][0], grid[n - 1][n - 1])-1;
+        int right = n * n;
+        int mid = (left + right) / 2;
+        while (1)
+        {
+            cout << "before check left:" << left << " mid:" << mid << " right:" << right << endl;
+            if (checkok(grid, mid))
+            {
+                cout << "checkout ok mid:" << mid << endl;
+                if (left + 1 == mid)
+                {
+                    return mid;
+                }
+                right = mid;
+                mid = (left + right) / 2;
+            }
+            else
+            {
+                cout << "checkout not ok mid:" << mid << endl;
+                left = mid;
+                mid = (left + right + 1) / 2;
+            }
+        }
+        return 0;
+    }
+};
 
 int main()
 {
     Solution A;
     //vector<vector<int>> res{{3, 1}, {2, 0}}; //3
-    vector<vector<int>> res{{0, 1, 2, 3, 4}, {24, 23, 22, 21, 5}, {12, 13, 14, 15, 16}, {11, 17, 18, 19, 20}, {10, 9, 8, 7, 6}}; //16
+    //vector<vector<int>> res{{0, 1, 2, 3, 4}, {24, 23, 22, 21, 5}, {12, 13, 14, 15, 16}, {11, 17, 18, 19, 20}, {10, 9, 8, 7, 6}}; //16
+    vector<vector<int>> res{{11,15,3,2},{6,4,0,13},{5,8,9,10},{1,14,12,7}};//11
     show(res);
     cout << A.swimInWater(res) << endl;
     return 0;
