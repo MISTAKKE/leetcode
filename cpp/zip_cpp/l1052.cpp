@@ -14,21 +14,21 @@ class Solution
 public:
     int maxSatisfied(vector<int> &customers, vector<int> &grumpy, int X)
     {
-        //customers = [1,0,1,2,1,1,7,5], grumpy = [0,1,0,1,0,1,0,1], X = 3
-        int val = 0;
+        int diffval = 0;
+        int postive = 0;
         for (int i = 0; i < X; ++i)
         {
-            val += customers[i];
+            postive += customers[i] * (1 - grumpy[i]); //must add when not angry
+            diffval += customers[i] * grumpy[i];       //the calmdown works only when angry
         }
-        int ret = val;
+        int diffmax = diffval;
         for (int i = X; i < customers.size(); ++i)
         {
-            val += customers[i] * grumpy[i] - customers[i - X] * grumpy[i - X];
-            cout << "i:" << i << " val:" << val << " ret:" << ret << endl;
-            ret = max(ret, val);
+            postive += customers[i] * (1 - grumpy[i]);                              //must add when not angry
+            diffval += customers[i] * grumpy[i] - customers[i - X] * grumpy[i - X]; //the calmdown works only when angry
+            diffmax = max(diffmax, diffval);
         }
-
-        return ret;
+        return diffmax + postive;
     }
 };
 
@@ -37,6 +37,9 @@ int main()
     Solution A;
     vector<int> customers{1, 0, 1, 2, 1, 1, 7, 5};
     vector<int> grumpy{0, 1, 0, 1, 0, 1, 0, 1};
+    // 1 + 1 + 1 + 1 + 7 + 5 = 16.
+    // vector<int> customers{4, 10, 10};
+    // vector<int> grumpy{1, 1, 0};
     cout << A.maxSatisfied(customers, grumpy, 3) << endl;
 
     return 0;
