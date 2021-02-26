@@ -11,7 +11,34 @@ description:
 class Solution
 {
 public:
-    vector<int> findNumOfValidWords(vector<string> &words, vector<string> &puzzles)
+    vector<int> findNumOfValidWords(vector<string> &w, vector<string> &p)
+    {
+        unordered_map<int, int> hash; //用map将string转为int, 而不是用vector将string转为int  前者可将相同的string降低
+        int n = w.size(), m = p.size();
+        vector<int> ans(m);
+        for (int i = 0; i < n; i++)
+        {
+            int t = 0;
+            for (char c : w[i])
+                t |= (1 << c - 'a');
+            hash[t]++;
+        }
+
+        for (int i = 0; i < m; i++)
+        {
+            int k = 0;             //k为第i个puzzle的值
+            int t = p[i][0] - 'a'; //t是第i个puzzle的首字母
+            for (char c : p[i])
+                k |= (1 << c - 'a');
+            for (int j = k; j != 0; j = (j - 1) & k)
+                if (j >> t & 1)
+                    ans[i] += hash[j];
+        }
+
+        return ans;
+    }
+
+    vector<int> findNumOfValidWords_old(vector<string> &words, vector<string> &puzzles)
     {
         vector<int> res(puzzles.size(), 0);
 
@@ -24,7 +51,7 @@ public:
             }
         }
 
-        vector<int> num(7, 0);
+        vector<int> num(puzzles.size(), 0);
         for (int i = 0; i < puzzles.size(); ++i)
         {
             for (auto &&c : puzzles[i])
@@ -73,9 +100,12 @@ public:
 int main()
 {
     Solution A;
-    vector<string> words{"aaaa", "asas", "able", "ability", "actt", "actor", "access"};
-    vector<string> puzzles{"aboveyz", "abrodyz", "abslute", "absoryz", "actresz", "gaswxyz"};
-    //输出：[1,1,3,2,4,0]
+    // vector<string> words{"aaaa", "asas", "able", "ability", "actt", "actor", "access"};
+    // vector<string> puzzles{"aboveyz", "abrodyz", "abslute", "absoryz", "actresz", "gaswxyz"};
+    // //输出：[1,1,3,2,4,0]
+
+    vector<string> words{"aebd", "cbdjegehgfcefbgceifdcjcbhdbbhhdi", "bbcaehdgdghgaaghdbdg", "fhgjegdagiadgdhaeicgjgifabadjdfe", "gcadacg", "efhjdffcaih", "cgfjcdddabcdafjhcafieiadgebdeicbjjifgjbaf", "cbfhbdaiajhdefgjefjibefjaahgdachhfge", "cjejijcibgigceefidhcgbbdgg", "jaedgdggbajbbibifadjeddbff", "chdihgafjgfeaeefdigfeifjaihcg", "giicgbjeah", "bagcfechdabicgbidbceggjfedaabfibhcieefjhj", "gbagbjhdjjdgifgaciehfjabi", "ehheaajfbjdhabbjafeid", "biajeeagdecjigefgidc", "fejfdfeghbbdfc", "bfbfffe", "digd", "bciabjhf"};
+    vector<string> puzzles{"axtniqf", "xsdlyik", "ldsimca", "ptvdamy", "djihgak", "xencovd", "rbwpugz", "xvsbpmj", "epfhmxs", "fshonmc"};
     show(A.findNumOfValidWords(words, puzzles));
 
     return 0;
