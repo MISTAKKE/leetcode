@@ -30,8 +30,8 @@ public:
             int t = p[i][0] - 'a'; //t是第i个puzzle的首字母
             for (char c : p[i])
                 k |= (1 << c - 'a');
-            for (int j = k; j != 0; j = (j - 1) & k)
-                if (j >> t & 1)
+            for (int j = k; j != 0; j = (j - 1) & k) //j=j-1 代表不停尝试更小的j，& 表示只care在pullze中有的；这是一个单调递减的，所以终止为j>0
+                if (j >> t & 1)                      //j右移t位后，就是上面puzzle的第一位，& 表示其是否存在
                     ans[i] += hash[j];
         }
 
