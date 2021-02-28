@@ -20,7 +20,9 @@ public:
         int minval = n + 1;
         for (int i = 0; i <= n; i++)
         {
-            while (!q.empty() && sum[q.back()] >= sum[i]) //保证队列里面的sum的递增的；【队列里面的数字是记录起始点idx，相同的值只需要起始点大的idx】
+            //保证队列里面的sum的递增的；
+            //【队列里面的数字是记录起始点idx，相同的值需要起始点大的idx，这样 i-idx才会更小，得到更短的长度
+            while (!q.empty() && sum[q.back()] >= sum[i]) 
                 q.pop_back();
             while (!q.empty() && sum[i] - sum[q.front()] >= K)//现在来的值sum[i]很给力，已经达到要求，来计算长度，将长的不要
             {
