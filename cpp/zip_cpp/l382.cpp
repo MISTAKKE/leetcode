@@ -21,9 +21,11 @@ public:
     /** @param head The linked list's head.
         Note that the head is guaranteed to be not null, so it contains at least one node. */
     ListNode *h;
+    ListNode *old;
     Solution(ListNode *head)
     {
         h = head;
+        old = head;
     }
 
     /** Returns a random node's value. */
@@ -33,8 +35,14 @@ public:
         int cnt = 0;
         while (h != NULL)
         {
-            h = h->next
+            cnt++;
+            if ((rand() % cnt == 0))
+            {
+                ret = h->val;
+            }
+            h = h->next;
         }
+        h = old;
         return ret;
     }
 };
