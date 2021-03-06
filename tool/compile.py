@@ -4,7 +4,7 @@ import os
 import time
 import commands
 
-defaultpath = "/root/leetcode/cpp"
+checkpathlist = ["/root/leetcode/cpp", "/root/leetcode/cpp_gram"]#需要检查哪些文件夹下面有cpp变动
 
 def checkcpp(filename):
     filename = filename.split(".")
@@ -21,16 +21,17 @@ def checkfile(filename):
 def getautofile():
     newfilename = ""
     newfiletime = 0.0
-    g = os.listdir(defaultpath)
-    for file_name in g:
-        file_name = defaultpath + "/" + file_name
-        if os.path.isdir(file_name):
-            continue
-        if os.stat(file_name).st_mtime > newfiletime:
-            if not checkcpp(file_name):
+    for eachpath in checkpathlist:
+        g = os.listdir(eachpath)
+        for file_name in g:
+            file_name = eachpath + "/" + file_name
+            if os.path.isdir(file_name):
                 continue
-            newfilename = file_name
-            newfiletime = os.stat(file_name).st_mtime
+            if os.stat(file_name).st_mtime > newfiletime:
+                if not checkcpp(file_name):
+                    continue
+                newfilename = file_name
+                newfiletime = os.stat(file_name).st_mtime
     return newfilename
 #print getautofile()
 
