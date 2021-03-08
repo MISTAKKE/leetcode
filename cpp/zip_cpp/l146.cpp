@@ -8,9 +8,9 @@ description:
 */
 
 //Class Solution
-class LRUCache
+class LRUCache1
 {
-/*
+    /*
     两个数组，data记录数字，-1是不存在  非-1是存在
     sequence是时间值，用于标记新旧，越大约新
 */
@@ -20,7 +20,7 @@ public:
     int cap;
     int time;
     int nowsize;
-    LRUCache(int capacity)
+    LRUCache1(int capacity)
     {
         data.resize(3001, -1);
         sequence.resize(3001, -1);
@@ -66,6 +66,97 @@ public:
             sequence[key] = ++time;
         }
     }
+};
+
+class LRUCache2
+{
+public:
+    list<pair<int, int>> seq;
+    map<int, list<pair<int, int>>::iterator> mp;
+    int cap;
+    LRUCache2(int capacity)
+    {
+        cap = capacity;
+    }
+    int get(int key)
+    {
+        auto it = mp.find(key);
+        if (it != mp.end())
+        {
+            seq.splice(seq.begin(), seq, it->second);
+            /**
+             * 1 splice(target_container itreator_postion, from_container_itreator_toend);
+             * 2 splice(target_container itreator_postion, from_container, from_itreator);
+             * 3 list::splice(target_contailer iteartor_postion, from_container, from_itera, end_itera);
+             */
+            return it->second->second;
+        }
+        return -1;
+    }
+
+    void put(int key, int value)
+    {
+        auto it = mp.find(key);
+        if (it != mp.end())
+        {
+            it->second->second = value;
+            seq.splice(seq.begin(), seq, it->second);
+            return;
+        }
+        seq.emplace_front(key, value);
+        /**
+         * insert to list first node
+        */
+        mp[key] = seq.begin();
+        if (seq.size() > cap)
+        {
+            mp.erase(seq.back().first);
+            seq.pop_back();
+        }
+        return;
+    }
+};
+
+class LRUCache
+{
+public:
+    LRUCache(int cap_)
+    {
+        cap = cap_;
+    }
+
+    int get(int key)
+    {
+        auto it = mp.find(key);
+        if(it!=mp.end())
+        {
+            seq.splice(seq.begin(), seq, it->second);
+            return it->second->second;
+        }
+        return -1;
+    }
+
+    void put(int key, int value)
+    {
+        auto it = mp.find(key);
+        if(it!=mp.end())
+        {
+            it->second->second = value;
+            seq.splice(seq.begin(), seq, it->second);
+            return;
+        }
+        seq.emplace_front(key, value);
+        mp[key] = seq.begin();
+        if(seq.size()>cap)
+        {
+            mp.erase(seq.back().first);
+            seq.pop_back();
+        }        
+    }
+private:
+    int cap;
+    map<int, list<pair<int, int>>::iterator> mp;
+    list<pair<int, int>> seq;
 };
 
 /**
