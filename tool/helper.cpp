@@ -44,6 +44,17 @@ void print(const Type &arg, const Types &...args)
     print(args...);
 }
 
+void show(ListNode *t)
+{
+    cout << "List: ";
+    ListNode *p = t;
+    while (p != NULL)
+    {
+        cout << p->val << " ";
+        p = p->next;
+    }
+    cout << endl;
+}
 template <typename T1, typename T2>
 void show(const map<T1, T2> mp)
 {
