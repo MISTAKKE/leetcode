@@ -14,18 +14,20 @@ public:
     int res;
     int maxPathSum(TreeNode *root)
     {
-        res = __INT32_MAX__ * -1;
-        help(root);
-        return res;
-    }
-    int help(TreeNode *root) //返回以root为根节点，只取一边的最大值
-    {
         if (root == NULL)
             return 0;
-        int left = max(0, help(root->left));
-        int right = max(0, help(root->right));
-        res = max(res, root->val + left + right);
-        return max(left, right) + root->val;
+        res = root->val;
+        res = max(help(root->left) + help(root->right) + root->val, res);
+        return res;
+    }
+    int help(TreeNode *root)
+    {
+        //返回当前节点加上左或者右最大的值，计算时可以更新res
+        if (root == NULL)
+            return 0;
+        int left = 
+
+        return 0;
     }
 };
 
