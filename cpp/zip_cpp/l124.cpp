@@ -17,7 +17,7 @@ public:
         if (root == NULL)
             return 0;
         res = root->val;
-        res = max(help(root->left) + help(root->right) + root->val, res);
+        help(root);
         return res;
     }
     int help(TreeNode *root)
@@ -25,9 +25,14 @@ public:
         //返回当前节点加上左或者右最大的值，计算时可以更新res
         if (root == NULL)
             return 0;
-        int left = 
-
-        return 0;
+        int left = 0;
+        int right = 0;
+        if(root->left != NULL)
+            left = max(help(root->left), 0);
+        if(root->right != NULL)
+            right = max(help(root->right), 0);
+        res = max(left + right + root->val, res);
+        return max(left, right) + root->val;
     }
 };
 
