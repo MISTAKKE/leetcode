@@ -49,7 +49,7 @@ public:
         ListNode *h = new ListNode(0); //   h -> p -> p1 -> p2 -> p3 -> NULL
         h->next = p;
         while (p->next != NULL) //2. reverse 后半部分
-        { //826441285
+        {
             ListNode *tmp = p->next;
             p->next = p->next->next;
             tmp->next = h->next;

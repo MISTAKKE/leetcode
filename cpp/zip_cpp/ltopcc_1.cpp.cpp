@@ -10,7 +10,7 @@ val <= 100
 
 //Class Solution
 
-class Solution1
+class Solution1 //二分法
 {
 public:
     int findrange(vector<int> &vec)
@@ -58,7 +58,7 @@ public:
     }
 };
 
-class Solution
+class Solution2 //单调栈
 {
 public:
     int findrange(vector<int> &vec)
@@ -67,24 +67,25 @@ public:
         {
             return 0;
         }
-        vector<int> sumval(vec.size() + 1, 0); //sumval[2] - sumval[0] = val[1] + val[2]
-        for (int i = 1; i <= vec.size(); ++i)
+        vector<int> sumval(vec.size(), 0); //sumval[2] - sumval[0] = val[1] + val[2]
+        sumval[0] = vec[0];
+        for (int i = 1; i < vec.size(); ++i)
         {
-            sumval[i] = sumval[i - 1] + vec[i - 1]; //sumval记录了截止到idx的合，sumval[i] - sumval[j] = val[i] + .. + val[j-1]
+            sumval[i] = sumval[i - 1] + vec[i]; //sumval记录了截止到idx的和，sumval[i] - sumval[j] = val[j+1] + .. + val[i]
         }
         stack<int> s;
         int res = 0;
         int n = vec.size();
         for (int i = 0; i < n; i++)
         {
-            while (!s.empty() && vec[i] <= vec[s.top()])
+            while (!s.empty() && vec[i] <= vec[s.top()]) //保证栈内是严格递增的
             {
-                int peak = vec[s.top()];
+                int peak = vec[s.top()]; //一溜出栈，栈顶是最小值
                 s.pop();
                 int l = s.empty() ? -1 : s.top();
                 int r = i;
-                //l和r是边界，因此区间是[l+1,r-1]，其区间和sumval[r+1]-sumval[l]
-                int dist = sumval[r] - sumval[l + 1];
+                //l和r是边界，因此区间是[l+1,r-1]
+                int dist = sumval[r - 1] - (l == -1 ? 0 : sumval[l]);
                 res = max(res, peak * dist);
             }
             s.push(i);
@@ -94,19 +95,96 @@ public:
             int peak = vec[s.top()];
             s.pop();
             int l = s.empty() ? -1 : s.top();
-            int r = n;
-
-            int dist = sumval[r] - sumval[l + 1];
+            int r = vec.size();
+            int dist = sumval[r - 1] - (l == -1 ? 0 : sumval[l]);
             res = max(res, peak * dist);
         }
         return res;
     }
 };
-main()
+
+class Solution3 //逐个左右延伸
+{
+public:
+    int findrange(vector<int> &vec)
+    {
+        if (vec.size() == 0)
+        {
+            return 0;
+        }
+        int res = 0;
+        vector<int> sumval(vec.size(), 0);
+        sumval[0] = vec[0];
+        for (int i = 1; i < vec.size(); ++i)
+        {
+            sumval[i] = sumval[i - 1] + vec[i];
+        }
+        for (int i = 0; i < vec.size(); ++i)
+        {
+            int left = i;
+            while (left > 0 && vec[left - 1] >= vec[i])
+            {
+                left -= 1;
+            }
+            int right = i;
+            while (right < vec.size() - 1 && vec[right + 1] >= vec[i])
+            {
+                right += 1;
+            }
+            res = max(res, (sumval[right] - sumval[left] + vec[left]) * vec[i]);
+        }
+        return res;
+    }
+};
+
+class Solution //逐个左右延伸
+{
+public:
+    int findrange(vector<int> &vec)
+    {
+        if (vec.size() == 0)
+        {
+            return 0;
+        }
+        int res = 0;
+        stack<int> s;
+        vector<int> sumval(vec.size(), 0);
+        sumval[0] = vec[0];
+        for (int i = 1; i < vec.size(); ++i)
+        {
+            sumval[i] = sumval[i - 1] + vec[i];
+        }
+        for (int i = 0; i < vec.size(); ++i)
+        {
+            while (!s.empty() && vec[s.top()] >= vec[i])
+            {
+                int idx = s.top();
+                s.pop();
+                int l = s.empty() ? -1 : s.top();
+                int r = i; // val[l+1] to val[t-1]
+                res = max(res, vec[idx] * (sumval[r - 1] - (l == -1 ? 0 : sumval[l])));
+            }
+            //val 1 3 5 7 2 3
+            //idx 0 1 2 3 4 5
+            //s   0       4 5
+            s.push(i);
+        }
+        while (!s.empty())
+        {
+            int idx = s.top();
+            s.pop();
+            int l = s.empty() ? -1 : s.top();
+            int r = vec.size() - 1;
+            res = max(res, vec[idx] * (sumval[r] - (l == -1 ? 0 : sumval[l])));
+        }
+        return res;
+    }
+};
+
+int main()
 {
     Solution A;
     vector<int> vec{3, 1, 6, 4, 5, 2};
     cout << A.findrange(vec) << endl;
-
     return 0;
 }
