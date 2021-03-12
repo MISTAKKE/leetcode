@@ -30,7 +30,7 @@ public:
         {
             sumval[i] = sumval[i - 1] + heights[i];
         }
-        // show(sumval);
+        show(sumval);
         int res = 0;
         stack<int> s;
         for (int i = 0; i < heights.size(); ++i)
@@ -39,10 +39,11 @@ public:
             {
                 int h = s.top();
                 s.pop();
-                int l = s.empty() ? -1 : s.top(); //l+1 is ok
-                int r = i;                        //l-1 is ok
-                // cout << "l:" << l << " r:" << r << " h:" << h << endl;
-                res = max(res, heights[h] * (sumval[r-1] - (l == -1 ? 0 : sumval[l])));
+                int l = s.empty() ? -1 : s.top();
+                int r = i - 1;
+                int w = r - l;
+                cout << "l:" << l << " r:" << r << " h:" << h << " val:" << heights[h] * w << endl;
+                res = max(res, heights[h] * w);
             }
             s.push(i);
         }
@@ -52,8 +53,9 @@ public:
             s.pop();
             int l = s.empty() ? -1 : s.top();
             int r = heights.size() - 1;
-            // cout << "l:" << l << " r:" << r << " h:" << h << endl;
-            res = max(res, heights[h] * (sumval[r-1] - (l == -1 ? 0 : sumval[l])));
+            int w = r - l;
+            cout << "l:" << l << " r:" << r << " h:" << h << " val:" << heights[h] * w << endl;
+            res = max(res, heights[h] * w);
         }
         return res;
     }
@@ -62,7 +64,8 @@ public:
 int main()
 {
     Solution A;
-    vector<int> vec{3, 1, 6, 4, 5, 2};
+    // vector<int> vec{3, 1, 6, 4, 5, 2};
+    vector<int> vec{2, 1, 5, 6, 2, 3};
     cout << A.largestRectangleArea(vec) << endl;
     return 0;
 }
