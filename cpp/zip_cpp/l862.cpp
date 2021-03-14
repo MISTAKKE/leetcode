@@ -7,7 +7,7 @@ description:
 
 */
 
-class Solution
+class Solution1
 {
 public:
     int shortestSubarray(vector<int> &A, int K)
@@ -22,9 +22,9 @@ public:
         {
             //保证队列里面的sum的递增的；
             //【队列里面的数字是记录起始点idx，相同的值需要起始点大的idx，这样 i-idx才会更小，得到更短的长度
-            while (!q.empty() && sum[q.back()] >= sum[i]) 
+            while (!q.empty() && sum[q.back()] >= sum[i])
                 q.pop_back();
-            while (!q.empty() && sum[i] - sum[q.front()] >= K)//现在来的值sum[i]很给力，已经达到要求，来计算长度，将长的不要
+            while (!q.empty() && sum[i] - sum[q.front()] >= K) //现在来的值sum[i]很给力，已经达到要求，来计算长度，将长的不要
             {
                 minval = min(minval, i - q.front());
                 q.pop_front();
@@ -61,6 +61,35 @@ public:
             q[r] = i;
         }
         return ans == 0x7fffffff ? -1 : ans;
+    }
+};
+
+class Solution
+{
+public:
+    int shortestSubarray(vector<int> &A, int K)
+    {
+        vector<int> sumval(A.size() + 1, 0);
+        for (int i = 1; i <= A.size(); ++i)
+            sumval[i] = sumval[i - 1] + A[i - 1];
+        int val = A.size() + 1;
+        deque<int> q;
+        for (int i = 0; i <= A.size(); ++i)
+        {
+            while (!q.empty() && sumval[q.back()] >= sumval[i]) // 1  3  -1  2    // 0 1 3
+            {
+                q.pop_back();
+            }
+            while (!q.empty() && (sumval[i] - sumval[q.front()] >= K))// 2 -1 2      //0 2    i=3
+            {
+                val = min(val, i - q.front());
+                q.pop_front();
+            }
+            q.push_back(i);
+        }
+        if (val == A.size() + 1)
+            return -1;
+        return val;
     }
 };
 
