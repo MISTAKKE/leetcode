@@ -1,0 +1,39 @@
+#include "../tool/helper.cpp"
+using namespace std;
+
+/*
+description:
+    0 <= nums.length <= 100
+    0 <= nums[i] <= 400
+*/
+
+//Class Solution
+class Solution
+{
+public:
+    int rob(vector<int> &nums)
+    {
+        int do1 = 0, do2 = 0;
+        int no1 = 0, no2 = 0;
+        if (nums.size() == 0)
+            return 0;
+        do1 = nums[0];
+        for(int i = 1;i<nums.size();++i)
+        {
+            do2 = no1 + nums[i];
+            no2 = max(do1, no1);
+            do1 = do2;
+            no1 = no2;
+        }
+        return max(do1, no1);
+    }
+};
+
+int main()
+{
+    Solution A;
+    vector<int>res{2,7,9,3,1};
+    cout<<A.rob(res)<<endl;
+
+    return 0;
+}

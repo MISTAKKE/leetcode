@@ -14,45 +14,42 @@ public:
     string reverseWords(string s)
     {
         reverse(s.begin(), s.end());
-        string ret = "";
+        string tmp = "";
         string res = "";
         for (int i = 0; i < s.size(); ++i)
         {
             if (s[i] != ' ')
             {
-                ret += s[i];
+                tmp += s[i];
             }
             else
             {
-                if (!ret.empty())
+                if (!tmp.empty())
                 {
-                    ret += ' ';
-                    res += ret;
-                    ret = "";
+                    reverse(tmp.begin(), tmp.end());
+                    if (!res.empty())
+                        res += " ";
+                    res += tmp;
+                    tmp = "";
                 }
             }
         }
-        if (!ret.empty())
+        if (!tmp.empty())
         {
-            ret += ' ';
-            res += ret;
+            reverse(tmp.begin(), tmp.end());
+            if (!res.empty())
+                res += " ";
+            res += tmp;
         }
         return res;
-    }
-    string strreverse(string s, int i, int j)
-    {
-        string str = "";
-        for (int k = j; j >= i; --k)
-        {
-            str += s[k];
-        }
-        return str;
     }
 };
 
 int main()
 {
     Solution A;
+    string str = "  abc edf ghijk  lom    ";
+    cout << A.reverseWords(str) << endl;
 
     return 0;
 }
