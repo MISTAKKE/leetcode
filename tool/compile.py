@@ -4,11 +4,31 @@ import os
 import time
 import commands
 
-checkpathlist = ["/root/leetcode/cpp", "/root/leetcode/cpp_gram"]#需要检查哪些文件夹下面有cpp变动
+checkpathlist = ["/root/leetcode/"]#需要检查哪些文件夹下面有cpp变动
+
+file_path_list=[]
+file_name_list=[]
+def getallfile(path):
+    allfilelist=os.listdir(path)
+    # 遍历该文件夹下的所有目录或者文件
+    for file in allfilelist:
+        filepath=os.path.join(path,file)
+        # 如果是文件夹，递归调用函数
+        if os.path.isdir(filepath):
+            getallfile(filepath)
+        # 如果不是文件夹，保存文件路径及文件名
+        elif os.path.isfile(filepath):
+            file_path_list.append(filepath)
+            file_name_list.append(filepath)
+    return file_path_list, file_name_list
 
 def checkcpp(filename):
-    filename = filename.split(".")
-    if filename[-1] == "cpp":
+    #排除 zip_cpp 文件夹内部的
+    filename = filename.split("/")
+    for path in filename:
+        if path == "zip_cpp" or path == "tool":
+            return False
+    if filename[-1].split(".")[-1] == "cpp":
         return True
     return False
 
@@ -22,16 +42,14 @@ def getautofile():
     newfilename = ""
     newfiletime = 0.0
     for eachpath in checkpathlist:
-        g = os.listdir(eachpath)
-        for file_name in g:
-            file_name = eachpath + "/" + file_name
-            if os.path.isdir(file_name):
+        getallfile(eachpath)
+    for file_name in file_name_list:
+        if os.stat(file_name).st_mtime > newfiletime:
+            if not checkcpp(file_name):
                 continue
-            if os.stat(file_name).st_mtime > newfiletime:
-                if not checkcpp(file_name):
-                    continue
-                newfilename = file_name
-                newfiletime = os.stat(file_name).st_mtime
+            newfilename = file_name
+            newfiletime = os.stat(file_name).st_mtime
+    print newfilename
     return newfilename
 #print getautofile()
 
@@ -46,7 +64,6 @@ def docompile(filename):
     res = commands.getstatusoutput(cmd)
     print res[1]
 #docompile("test.cpp")
-
 
 if __name__=='__main__':
     filename = ""
