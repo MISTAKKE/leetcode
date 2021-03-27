@@ -9,7 +9,7 @@ description:
 
 //Class Solution
 
-class Solution
+class Solution1
 {
 private:
     unordered_map<int, int> index;
@@ -44,6 +44,34 @@ public:
     }
 };
 
+class Solution
+{
+private:
+    unordered_map<int, int> index;
+
+public:
+    TreeNode *buildTree(vector<int> &preorder, vector<int> &inorder)
+    {
+        for (int i = 0; i < inorder.size(); ++i)
+        {
+            index[inorder[i]] = i;
+        }
+        return helper(preorder, inorder, 0, preorder.size() - 1, 0, inorder.size() - 1);
+        // 前序遍历 preorder = [3,9,20,15,7]
+        // 中序遍历 inorder = [9,3,15,20,7]
+    }
+    TreeNode *helper(vector<int> &preorder, vector<int> &inorder, int preorder_left, int preorder_right, int inorder_left, int inorder_right)
+    {
+        if (preorder_left > preorder_right || inorder_left > inorder_right)
+            return NULL;
+        TreeNode *root = new TreeNode(preorder[preorder_left]);
+        int inorder_root = index[preorder[preorder_left]];
+        int lefttreesize = inorder_root - inorder_left;
+        root->left = helper(preorder, inorder, preorder_left + 1, preorder_left + lefttreesize, inorder_left, inorder_root - 1);
+        root->right = helper(preorder, inorder, preorder_left + lefttreesize + 1, preorder_right, inorder_root + 1, inorder_right);
+        return root;
+    }
+};
 int main()
 {
     Solution A;

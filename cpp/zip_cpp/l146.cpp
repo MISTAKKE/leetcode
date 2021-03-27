@@ -117,10 +117,10 @@ public:
     }
 };
 
-class LRUCache
+class LRUCache3
 {
 public:
-    LRUCache(int cap_)
+    LRUCache3(int cap_)
     {
         cap = cap_;
     }
@@ -128,7 +128,7 @@ public:
     int get(int key)
     {
         auto it = mp.find(key);
-        if(it!=mp.end())
+        if (it != mp.end())
         {
             seq.splice(seq.begin(), seq, it->second);
             return it->second->second;
@@ -139,7 +139,7 @@ public:
     void put(int key, int value)
     {
         auto it = mp.find(key);
-        if(it!=mp.end())
+        if (it != mp.end())
         {
             it->second->second = value;
             seq.splice(seq.begin(), seq, it->second);
@@ -147,16 +147,64 @@ public:
         }
         seq.emplace_front(key, value);
         mp[key] = seq.begin();
-        if(seq.size()>cap)
+        if (seq.size() > cap)
         {
             mp.erase(seq.back().first);
             seq.pop_back();
-        }        
+        }
     }
+
 private:
     int cap;
     map<int, list<pair<int, int>>::iterator> mp;
     list<pair<int, int>> seq;
+};
+
+class LRUCache
+{
+public:
+/*
+    用list标记顺序，头部是最近访问的节点
+    用mp找到list节点，标记是否在其中
+    空间复杂度O(N) 时间复杂度 O(logN)
+    LFU 460
+*/
+    map<int, list<pair<int, int>>::iterator> mp;
+    list<pair<int, int>> seq;
+    int cap;
+    LRUCache(int capacity)
+    {
+        cap = capacity;
+    }
+
+    int get(int key)
+    {
+        auto it = mp.find(key);
+        if(it!=mp.end())
+        {
+            seq.splice(seq.begin(), seq, it->second);//把对应的iterator放到头部
+            return it->second->second;
+        }
+        return -1;
+    }
+
+    void put(int key, int value)
+    {
+        auto it = mp.find(key);
+        if(it!=mp.end())
+        {
+            seq.splice(seq.begin(), seq, it->second);//把对应的iterator放到头部
+            it->second->second = value;
+            return;
+        }
+        seq.push_front(make_pair(key, value));
+        mp[key] = seq.begin();
+        if(mp.size()>cap)
+        {
+            mp.erase(seq.back().first);
+            seq.pop_back();
+        }
+    }
 };
 
 /**
@@ -184,7 +232,7 @@ int main()
     lRUCache.put(4, 4);              // 该操作会使得关键字 1 作废，缓存是 {4=4, 3=3}
     cout << lRUCache.get(1) << endl; // 返回 -1 (未找到)
     cout << lRUCache.get(3) << endl; // 返回 3
-    cout << lRUCache.get(4) << endl; // 返回 4
+    cout << lRUCache.get(4) << endl; // 返回 4 
 
     return 0;
 }
