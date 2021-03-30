@@ -53,7 +53,7 @@ int f1(int a, int b){};
 
 int f2(const int &a, int b){};
 
-int main()
+int main() 
 {
     void (*pNormal)() = &f0;
     pNormal(); //调用
