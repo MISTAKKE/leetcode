@@ -3,8 +3,10 @@ using namespace std;
 
 /*
 description:
-
-
+    0 <= amount (总金额) <= 5000
+    1 <= coin (硬币面额) <= 5000
+    硬币种类不超过 500 种
+    结果符合 32 位符号整数
 */
 
 //Class Solution

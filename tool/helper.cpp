@@ -21,6 +21,10 @@ struct ListNode
     ListNode() : val(0), next(nullptr) {}
     ListNode(int x) : val(x), next(nullptr) {}
     ListNode(int x, ListNode *next) : val(x), next(next) {}
+    bool operator<(const ListNode &c)const
+    {
+        return val > c.val;
+    }
 };
 struct TreeNode
 {
