@@ -71,7 +71,7 @@ public:
 
 //         每两个座位成一对，假定左边的人都是合法的不变，如果TA右边的人与TA匹配则
 //         跳过，不匹配则找到TA的匹配对象的与TA右边的人交换。
-class Solution
+class Solution2
 {
 public:
     int parter(int val)
@@ -103,7 +103,7 @@ class Solution
 {
 public:
     vector<int> parent;
-    int find(int idx)
+    int find2(int idx)
     {
         int father = parent[idx];
         while (idx != parent[idx])
@@ -118,19 +118,32 @@ public:
         }
         return idx;
     }
+    int find( int i)
+    {
+        int son = parent[i];
+        while (i != parent[i])
+        {
+            i = parent[i];
+        }
+        while (son != i)
+        {
+            int tmp = parent[son];
+            parent[son] = i;
+            son = tmp;
+        }
+        return i;
+    }
     void merge(int i, int j)
     {
         i = parent[i];
         j = parent[j];
-        if (i < j)
-            parent[i] = j;
-        else
-            parent[j] = i;
+        parent[i] = j;
     }
     int minSwapsCouples(vector<int> &row)
     {
         int n = row.size() / 2;
         parent.resize(n);
+        int count = 0;
         for (int i = 0; i < n; ++i)
         {
             parent[i] = i;
@@ -139,8 +152,18 @@ public:
         {
             int p1 = row[i * 2] / 2;
             int p2 = row[i * 2 + 1] / 2;
+            // cout << "merge: row[i * 2]:" << row[i * 2]/2 << "     row[i * 2 + 1]:" << row[i * 2 + 1]/2 << endl;
             merge(p1, p2);
         }
+        for (int i = 0; i < n; ++i)
+        {
+            if (parent[i] != i)
+            {
+                count += 1;
+            }
+        }
+        show(parent);
+        return count;
     }
 };
 /*
@@ -156,7 +179,8 @@ int main()
     Solution A;
     // vector<int> res{0, 2, 1, 3}; // 1
     // vector<int> res{0, 3, 4, 1, 2, 7, 6, 9, 8, 5}; // 4
-    vector<int> res{3, 2, 0, 1}; // 0
+    // vector<int> res{3, 2, 0, 1}; // 0
+    vector<int> res{12, 11, 9, 0, 23, 7, 1, 22, 21, 18, 15, 16, 14, 2, 17, 19, 13, 8, 5, 3, 6, 4, 20, 10};
 
     cout << A.minSwapsCouples(res) << endl;
     return 0;
