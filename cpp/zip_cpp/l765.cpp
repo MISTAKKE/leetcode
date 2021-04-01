@@ -103,40 +103,25 @@ class Solution
 {
 public:
     vector<int> parent;
-    int find2(int idx)
+    int find(int idx)
     {
-        int father = parent[idx];
+        int son = idx;
         while (idx != parent[idx])
         {
             idx = parent[idx];
         }
-        while (parent[father] != idx)
+        while (parent[son] != idx)
         {
-            int tmp = parent[father];
-            parent[father] = idx;
-            father = tmp;
+            int tmp = parent[son];
+            parent[son] = idx;
+            son = tmp;
         }
         return idx;
     }
-    int find( int i)
-    {
-        int son = parent[i];
-        while (i != parent[i])
-        {
-            i = parent[i];
-        }
-        while (son != i)
-        {
-            int tmp = parent[son];
-            parent[son] = i;
-            son = tmp;
-        }
-        return i;
-    }
     void merge(int i, int j)
     {
-        i = parent[i];
-        j = parent[j];
+        i = find(i);
+        j = find(j);
         parent[i] = j;
     }
     int minSwapsCouples(vector<int> &row)
@@ -178,33 +163,10 @@ int main()
 {
     Solution A;
     // vector<int> res{0, 2, 1, 3}; // 1
-    // vector<int> res{0, 3, 4, 1, 2, 7, 6, 9, 8, 5}; // 4
+    vector<int> res{0, 3, 4, 1, 2, 7, 6, 9, 8, 5}; // 4
     // vector<int> res{3, 2, 0, 1}; // 0
-    vector<int> res{12, 11, 9, 0, 23, 7, 1, 22, 21, 18, 15, 16, 14, 2, 17, 19, 13, 8, 5, 3, 6, 4, 20, 10};
+    // vector<int> res{12, 11, 9, 0, 23, 7, 1, 22, 21, 18, 15, 16, 14, 2, 17, 19, 13, 8, 5, 3, 6, 4, 20, 10};
 
     cout << A.minSwapsCouples(res) << endl;
     return 0;
 }
-
-// class Solution(object):
-//     def minSwapsCouples(self, row):
-//         """
-//         每两个座位成一对，假定左边的人都是合法的不变，如果TA右边的人与TA匹配则
-//         跳过，不匹配则找到TA的匹配对象的与TA右边的人交换。
-//         """
-//         def find_another(n):
-//             if n % 2 == 0:
-//                 return n + 1
-//             else:
-//                 return n - 1
-
-//         c = 0
-//         for i in range(0, len(row), 2):
-//             p1 = row[i]
-//             p2 = find_another(p1)
-//             if row[i+1] != p2:
-//                 j = row.index(p2)
-//                 row[i+1], row[j] = row[j], row[i+1]
-//                 c += 1
-
-//         return c
