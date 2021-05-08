@@ -12,7 +12,7 @@ description:
 class Solution
 {
 public:
-    ListNode *reverseKGroup(ListNode *head, int k)
+    ListNode *reverseKGroup2(ListNode *head, int k)
     {
         if (head == NULL || k == 1)
             return head;
@@ -60,6 +60,52 @@ public:
         delete h;
         return head;
     }
+
+    ListNode *reverseKGroup(ListNode *head, int k)
+    {
+        if(head==NULL || k==1)
+            return head;
+        ListNode *h = new ListNode(0);
+        h->next = head;
+        ListNode *last = h, *tmp, *p;
+
+        // h ->  [k] [k] [k-last] head, p ...
+        while(1)
+        {
+            int cnt = k;
+            p = head->next;
+            while(p!=NULL && cnt != 1)
+            {
+                p = p->next;
+                cnt-=1;
+            }
+            if(cnt != 1)
+            {
+                last->next = head;
+                break;
+            }
+            //head is the first of k, p is the nexthead of k
+            //to insert as head to last behind
+            while(head->next != p)
+            {
+                tmp = head->next;
+                head->next = head->next->next;
+                tmp->next = last->next;
+                last->next = tmp;
+            }
+            //head is the last of k, p is the nexthead of k
+            last = head;
+            head = p;
+            if(head==NULL)
+            {
+                break;
+            }
+        }
+
+        head = h->next;
+        delete h;
+        return head;
+    }
 };
 
 int main()
@@ -74,7 +120,7 @@ int main()
     l1.next = &l2;
     l2.next = &l3;
     l3.next = &l4;
-    l4.next = &l5;
-    show(A.reverseKGroup(&l1, 3));
+    // l4.next = &l5;
+    show(A.reverseKGroup(&l1, 2));
     return 0;
 }
