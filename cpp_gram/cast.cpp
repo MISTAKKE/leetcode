@@ -16,6 +16,7 @@ int main(int argc, char** argv)
 	int num = 0x00636261;//用16进制表示32位int，0x61是字符'a'的ASCII码
 	int *pnum = &num;
 	char * pstr = reinterpret_cast<char *>(pnum);
+    cout<<"sizeof(void*>"<<sizeof(void*)<<endl;
 	cout<<"变量num的地址: "<<&num<<endl;
 	cout<<"pnum指针的值(也就是num的地址): "<<pnum<<endl;
 	cout<<"pnum指针指向的值(也就是pnum指向的地址，以类型int展示的值): "<<*pnum<<endl;
