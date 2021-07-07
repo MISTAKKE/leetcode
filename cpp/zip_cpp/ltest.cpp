@@ -16,10 +16,8 @@ description:
 
 int main()
 {
-    int i = 0;
-    char c = 1;
-    int d = (int)c;
-    cout<<d<<endl;
+    std::string num = "50300408822021070200620085001";
+    std::cout<<num.substr(26,4)<<std::endl;
 
     return 0;
 }
