@@ -4,7 +4,7 @@ import os
 import time
 import commands
 
-checkpathlist = ["/root/leetcode/"]#需要检查哪些文件夹下面有cpp变动
+checkpathlist = ["/root/leetcode/", "/root/algo/"]#需要检查哪些文件夹下面有cpp变动
 
 file_path_list=[]
 file_name_list=[]

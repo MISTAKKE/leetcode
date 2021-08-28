@@ -1,4 +1,4 @@
-#include "../tool/helper.cpp"
+#include "/root/leetcode/tool/helper.cpp"
 using namespace std;
 
 /*
