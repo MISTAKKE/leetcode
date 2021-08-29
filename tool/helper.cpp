@@ -159,3 +159,20 @@ int main_test()
     test();
     return 0;
 }
+
+ListNode* MakeRandomListNode(int size, int range_min, int range_max)
+{
+    if(size==0)
+        return NULL;
+    ListNode *prehead = new ListNode(0);
+    while(size--)
+    {
+        int val = random() % (range_max - range_min + 1) + range_min;
+        ListNode *tmp = new ListNode(val);
+        tmp->next = prehead->next;
+        prehead->next = tmp;
+    }
+    ListNode *head = prehead->next;
+    delete prehead;
+    return head;
+}

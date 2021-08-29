@@ -52,17 +52,10 @@ public:
 int main()
 {
     Solution A;
-    ListNode *pa = new ListNode(10);
-    ListNode *pb = new ListNode(1);
-    ListNode *pc = new ListNode(4);
-    ListNode *pd = new ListNode(3);
-    ListNode *pe = new ListNode(9);
-    pa->next = pb;
-    pb->next = pc;
-    pc->next = pd;
-    pd->next = pe;
+    ListNode *pa = MakeRandomListNode(10, 1 , 8);
     show(pa);
     pa=A.partition(pa, 4);
     show(pa);
+    delete pa;
     return 0;
 }
