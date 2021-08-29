@@ -1,13 +1,16 @@
 #init 命令:
+echo $#
 if [[ $# -eq 1 ]]; then
     #一个参数  init 998
     #  如果该文件在zip_cpp存在就复制过来
     #  如果该文件不存在就新建一个
-    if test -f ~/leetcode/cpp/zip_cpp/l$1.cpp; 
+    param=$1
+    param=${param%?}
+    if test -f ~/leetcode/cpp/zip_cpp/l$param.cpp; 
     then
-        cp ~/leetcode/cpp/zip_cpp/l$1.cpp ~/leetcode/cpp/l$1.cpp
+        cp ~/leetcode/cpp/zip_cpp/l$param.cpp ~/leetcode/cpp/l$param.cpp
     else
-        cp ~/leetcode/cpp/zip_cpp/init.cpp ~/leetcode/cpp/l$1.cpp
+        cp ~/leetcode/cpp/zip_cpp/init.cpp ~/leetcode/cpp/l$param.cpp
     fi
 elif [[ $# -eq 2 ]]; then
     #两个参数 init 889 ./
