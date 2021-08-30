@@ -160,6 +160,7 @@ int main_test()
     return 0;
 }
 
+//随机生成一个列表
 ListNode* MakeRandomListNode(int size, int range_min, int range_max)
 {
     if(size==0)
@@ -168,6 +169,24 @@ ListNode* MakeRandomListNode(int size, int range_min, int range_max)
     while(size--)
     {
         int val = random() % (range_max - range_min + 1) + range_min;
+        ListNode *tmp = new ListNode(val);
+        tmp->next = prehead->next;
+        prehead->next = tmp;
+    }
+    ListNode *head = prehead->next;
+    delete prehead;
+    return head;
+}
+
+//根据数组生成列表
+ListNode* MakeListNode(vector<int> vec)
+{
+    if(vec.size()==0)
+        return NULL;
+    ListNode *prehead = new ListNode(0);
+    for(int i = vec.size()-1;i>=0;--i)
+    {
+        int val = vec[i];
         ListNode *tmp = new ListNode(val);
         tmp->next = prehead->next;
         prehead->next = tmp;
