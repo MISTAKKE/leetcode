@@ -1,5 +1,4 @@
 #init 命令:
-echo $#
 if [[ $# -eq 1 ]]; then
     #一个参数  init 998
     #  如果该文件在zip_cpp存在就复制过来
