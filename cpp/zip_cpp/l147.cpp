@@ -11,7 +11,7 @@ description:
  
 class Solution {
 public:
-    ListNode* insertionSortList(ListNode* head) {
+    ListNode* insertionSortList1(ListNode* head) {
         if(head == NULL) return NULL;
         ListNode* newhead = new ListNode(0);
         newhead->next = head;
@@ -34,6 +34,32 @@ public:
         }
         head = newhead->next;
           delete newhead;
+        return head;
+    }
+    ListNode* insertionSortList(ListNode* head) {
+        if(head == NULL) return NULL;
+        ListNode* newhead = new ListNode(0);
+        newhead->next = head;
+        while(head->next != NULL)
+        {
+            if(head->next->val >= head->val)
+            {
+                head = head->next;
+                continue;
+            }
+            ListNode *now = newhead;
+            while(head->next->val > now->next->val)
+            {
+                now = now->next;
+            }
+            ListNode *tmp = head->next;
+            head->next = head->next->next;
+            tmp->next = now->next;
+            now->next = tmp;    
+
+        }
+        head = newhead->next;
+        delete newhead;
         return head;
     }
 };
