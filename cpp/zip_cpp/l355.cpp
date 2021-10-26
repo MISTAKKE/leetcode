@@ -38,17 +38,19 @@ public:
     
     /** Retrieve the 10 most recent tweet ids in the user's news feed. Each item in the news feed must be posted by users who the user followed or by the user herself. Tweets must be ordered from most recent to least recent. */
     vector<int> getNewsFeed(int userId) {
-        vector<pair<int,int>> news;
-        for(auto u:userrelation)
+        priority_queue<pair<int,int>, vector<pair<int,int>>, less<pair<int, int>>> theq;
+        for(auto u:userrelation[userId])
         {
-            if(usertwitterlist.find(u.first) != usertwitterlist.end())
+            if(usertwitterlist.find(u) != usertwitterlist.end())
             {
-                news.insert(news.end(), usertwitterlist[u.first].begin(), usertwitterlist[u.first].end());
+                for(auto node: usertwitterlist[u])
+                {
+                    theq.push(node);
+                }
             }
         }
-        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int, int>>> theq;
         vector<int>ret;
-        while(ret.size()<10)
+        while(ret.size()<10 && !theq.empty())
         {
             int v = theq.top().second;
             theq.pop();
@@ -83,7 +85,7 @@ int main()
     obj->postTweet(2,129);
     vector<int> param_2 = obj->getNewsFeed(2);
     show(param_2);
-    obj->follow(1,2);
+    // obj->follow(1,2);
     vector<int> param_3 = obj->getNewsFeed(1);
     show(param_3);
     obj->unfollow(1,2);
