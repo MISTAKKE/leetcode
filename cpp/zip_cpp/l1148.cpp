@@ -34,7 +34,6 @@ public:
                     full.erase(rains[idx]);
                     out.push_back(rains[idx]);
                     cout << "第" << i << "天，把" << rains[idx] << "的水排了 idx:" << idx << endl;
-                    ++idx;
                 }
                 else
                 {
@@ -45,7 +44,7 @@ public:
             else //当天雨天，准备放工
             {
                 cout << "第" << i << "天，今天是雨天 idx:" << idx << endl;
-                if(full.count(rains[idx])==1)
+                if(full.count(rains[i])==1)
                 {
                     cout << "i:" << i << " 把" << rains[i] << "的水库满上了， 房塌了" << endl;
                     return vector<int>();
