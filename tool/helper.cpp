@@ -92,9 +92,9 @@ void show(const stack<T> st2)
 template <typename T>
 void show(const vector<T> vec2)
 {
+    cout<<"showing vector, it's size is " << vec2.size()<<endl;
     for (int i = 0; i < vec2.size(); ++i)
-        cout << setw(6) << vec2[i] << " ";
-    cout << endl;
+        cout << setw(6) << vec2[i] << " "<<endl;
 }
 
 template <typename T>
