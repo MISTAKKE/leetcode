@@ -12,6 +12,23 @@ description:
 class Solution
 {
 public:
+    vector<int> res;
+    vector<int> preorderTraversal(TreeNode *root)
+    {
+        if (root == NULL)
+            return res;
+        res.push_back(root->val);
+        if (root->left != NULL)
+            preorderTraversal(root->left);
+        if (root->right != NULL)
+            preorderTraversal(root->right);
+        return res;
+    }
+};
+
+class Solution2
+{
+public:
     vector<int> preorderTraversal(TreeNode *root)
     {
         stack<TreeNode *> q;
