@@ -21,14 +21,16 @@ description:
 
 
 
-
-
+int check()
+{
+    return 0x10008422;
+}
 
 int main()
 {
-    int kk = -1;
-    uint32_t dd = (uint32_t)(kk);
-        cout<<dd<<endl;
-
+    if(!check())
+        cout<<"if 命中"<<endl;
+    else
+        cout<<"if 不命中"<<endl;
     return 0;
 }
