@@ -47,7 +47,7 @@ public:
             std::set<int> cur2{c};
             for(auto &c2 : cur) // O(常数<=32)
             {
-                cur2.insert(c2 | c);
+                  cur2.insert(c2 | c);
             }
             cur = cur2;
             ans.insert(cur.begin(), cur.end());
