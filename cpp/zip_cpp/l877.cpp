@@ -34,18 +34,33 @@ sum(piles[i]) 是 奇数
 */
 
 // Class Solution
-//二维数组
+//一维数组
 class Solution {
+  public:
+    bool stoneGame(vector<int>& piles) {
+        vector<int> dp(piles.size(), 0);
+        for (int i = 0; i < piles.size(); ++i) {
+            dp[i] = piles[i];
+        }
+        for (int i = piles.size() - 2; i >= 0; --i) {
+            for (int j = i + 1; j <= piles.size() - 1; ++j) {
+                dp[j] = max(piles[j] - dp[j - 1], piles[j - 1] - dp[j]);
+            }
+        }
+        return dp[piles.size() - 1] > 0;
+    }
+};
+//二维数组
+class Solution2 {
   public:
     bool stoneGame(vector<int>& piles) {
         vector<vector<int>> dp(piles.size(), vector<int>(piles.size(), 0));
         for (int i = 0; i < piles.size(); ++i) {
             dp[i][i] = piles[i];
         }
-        for (int i = 0; i < piles.size(); ++i) {
-            for (int j = i + 1; j < piles.size(); ++j) {
-                dp[i][j] = max();
-            }
+        for (int i = piles.size() - 1; i >= 0; --i) {
+            for (int j = piles.size() - 1; j > i; --j)
+                dp[i][j] = max(piles[i] - dp[i + 1][j], piles[j] - dp[i][j - 1]);
         }
         return dp[0][piles.size() - 1] > 0;
     }
@@ -74,7 +89,7 @@ class Solution1 {
 };
 int main() {
     Solution A;
-    vector<int> str{3, 7, 2, 3};
+    vector<int> str{6, 7, 5, 10, 8, 9, 8, 9, 1, 2};
     cout << A.stoneGame(str) << endl;
     return 0;
 }
