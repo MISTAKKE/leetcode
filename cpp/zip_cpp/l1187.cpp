@@ -28,8 +28,10 @@ arr2.length，然后进行赋值运算 arr1[i] = arr2[j]。 如果无法让 ar
 1 <= arr1.length, arr2.length <= 2000
 0 <= arr1[i], arr2[i] <= 10^9
 */
-
-// Class Solution
+/*
+lower_bound 第一个大于等于的idx
+upper_bound 第一个大于的idx
+*/
 
 class Solution {
   public:

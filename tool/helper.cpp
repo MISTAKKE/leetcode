@@ -15,74 +15,74 @@
 #include <numeric>
 #include <bits/stdc++.h>
 using namespace std;
-struct ListNode
-{
+struct ListNode {
     int val;
     ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode *next) : val(x), next(next) {}
-    bool operator<(const ListNode &c)const
-    {
+    ListNode() :
+        val(0), next(nullptr) {
+    }
+    ListNode(int x) :
+        val(x), next(nullptr) {
+    }
+    ListNode(int x, ListNode *next) :
+        val(x), next(next) {
+    }
+    bool operator<(const ListNode &c) const {
         return val > c.val;
     }
 };
-struct TreeNode
-{
+struct TreeNode {
     int val;
     TreeNode *left;
     TreeNode *right;
-    TreeNode() : val(0), left(nullptr), right(nullptr) {}
-    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
-    TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+    TreeNode() :
+        val(0), left(nullptr), right(nullptr) {
+    }
+    TreeNode(int x) :
+        val(x), left(nullptr), right(nullptr) {
+    }
+    TreeNode(int x, TreeNode *left, TreeNode *right) :
+        val(x), left(left), right(right) {
+    }
 };
 
-void print()
-{
+void print() {
     cout << endl;
 } // 递归终止条件。这是必需的。
 
 template <typename Type, typename... Types>
-void print(const Type &arg, const Types &...args)
-{
+void print(const Type &arg, const Types &...args) {
     std::cout << arg << " ";
     print(args...);
 }
 
-void show(ListNode *t)
-{
+void show(ListNode *t) {
     cout << "List: ";
     ListNode *p = t;
-    while (p != NULL)
-    {
+    while (p != NULL) {
         cout << p->val << " ";
         p = p->next;
     }
     cout << endl;
 }
 template <typename T1, typename T2>
-void show(const map<T1, T2> mp)
-{
-    for (auto c : mp)
-    {
+void show(const map<T1, T2> mp) {
+    for (auto c : mp) {
         cout << setw(6) << c.first << ":" << c.second << endl;
     }
     cout << endl;
 }
 
 template <typename T>
-void show(const stack<T> st2)
-{
+void show(const stack<T> st2) {
     stack<T> st = st2;
     vector<T> vec;
-    while (!st.empty())
-    {
+    while (!st.empty()) {
         vec.insert(vec.begin(), st.top());
         st.pop();
     }
     cout << "stack: [";
-    for (auto c : vec)
-    {
+    for (auto c : vec) {
         cout << setw(3) << c;
     }
     cout << "]" << endl;
@@ -90,27 +90,23 @@ void show(const stack<T> st2)
 }
 
 template <typename T>
-void show(const vector<T> vec2)
-{
-    cout<<"showing vector, it's size is " << vec2.size()<<endl;
+void show(const vector<T> vec2) {
     for (int i = 0; i < vec2.size(); ++i)
-        cout << setw(6) << vec2[i] << " "<<endl;
+        cout << setw(6) << vec2[i] << " ";
+    cout << endl;
 }
 
 template <typename T>
-void show(const vector<vector<T>> vec2)
-{
+void show(const vector<vector<T>> vec2) {
     for (int i = 0; i < vec2.size(); ++i)
         show(vec2[i]);
     cout << endl;
 }
 
 template <typename T>
-void show(const queue<T> q)
-{
+void show(const queue<T> q) {
     queue<T> q2 = q;
-    while (!q2.empty())
-    {
+    while (!q2.empty()) {
         cout << setw(6) << q2.front() << " ";
         q2.pop();
     }
@@ -118,24 +114,20 @@ void show(const queue<T> q)
 }
 
 template <typename T>
-void show(const set<T> q)
-{
+void show(const set<T> q) {
     set<T> q2 = q;
-    for (auto iter = q.begin(); iter != q.end(); ++iter)
-    {
+    for (auto iter = q.begin(); iter != q.end(); ++iter) {
         cout << setw(6) << *iter << " ";
     }
     cout << endl;
 }
 
 template <class T1, class T2>
-ostream &operator<<(ostream &out, const pair<T1, T2> &_)
-{
+ostream &operator<<(ostream &out, const pair<T1, T2> &_) {
     return out << "(" << _.first << ", " << _.second << ")";
 }
 
-void test()
-{
+void test() {
     vector<int> vec{1, 2, 3, 4, 7, 6, 5};
     vector<vector<int>> vec2(3, vec);
     show(vec2);
@@ -154,20 +146,17 @@ void test()
     show(st);
 }
 
-int main_test()
-{
+int main_test() {
     test();
     return 0;
 }
 
 //随机生成一个列表
-ListNode* MakeRandomListNode(int size, int range_min, int range_max)
-{
-    if(size==0)
+ListNode *MakeRandomListNode(int size, int range_min, int range_max) {
+    if (size == 0)
         return NULL;
     ListNode *prehead = new ListNode(0);
-    while(size--)
-    {
+    while (size--) {
         int val = random() % (range_max - range_min + 1) + range_min;
         ListNode *tmp = new ListNode(val);
         tmp->next = prehead->next;
@@ -179,13 +168,11 @@ ListNode* MakeRandomListNode(int size, int range_min, int range_max)
 }
 
 //根据数组生成列表
-ListNode* MakeListNode(vector<int> vec)
-{
-    if(vec.size()==0)
+ListNode *MakeListNode(vector<int> vec) {
+    if (vec.size() == 0)
         return NULL;
     ListNode *prehead = new ListNode(0);
-    for(int i = vec.size()-1;i>=0;--i)
-    {
+    for (int i = vec.size() - 1; i >= 0; --i) {
         int val = vec[i];
         ListNode *tmp = new ListNode(val);
         tmp->next = prehead->next;
