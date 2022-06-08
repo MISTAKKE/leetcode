@@ -34,6 +34,13 @@ sum(piles[i]) 是 奇数
 */
 
 // Class Solution
+//先手必胜
+class Solution {
+  public:
+    bool stoneGame(vector<int>& piles) {
+        return 1;
+    }
+};
 //一维数组
 class Solution {
   public:
