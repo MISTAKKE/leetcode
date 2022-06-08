@@ -37,18 +37,24 @@ description:
 class Solution {
   public:
     int coinChange(vector<int>& coins, int amount) {
+        sort(coins.begin(), coins.end());
         vector<int> dp(amount + 1, -1);
         dp[0] = 0;
         for (int i = 0; i < coins.size(); ++i) {
-            dp[coins[i]] = 1;
+            if (coins[i] <= amount) {
+                dp[coins[i]] = 1;
+            }
         }
+
         for (int i = 1; i <= amount; ++i) {
-            for (int k = 1; k < i; ++k) {
-                if (dp[i] != -1) {
-                    dp[i] = dp[i], dp[k] + dp[i - k];
-                }
-                else {
-                    dp[i] = dp[k] + dp[i - k];
+            for (int k = coins[0]; k < i - coins[0]; ++k) {
+                if (dp[k] != -1 && dp[i - k] != -1) {
+                    if (dp[i] != -1) {
+                        dp[i] = min(dp[i], dp[k] + dp[i - k]);
+                    }
+                    else {
+                        dp[i] = dp[k] + dp[i - k];
+                    }
                 }
             }
         }
@@ -58,6 +64,7 @@ class Solution {
 
 int main() {
     Solution A;
-
+    vector<int> coins{1, 2, 5};
+    cout << A.coinChange(coins, 11) << endl;
     return 0;
 }
