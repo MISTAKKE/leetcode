@@ -34,31 +34,26 @@ description:
 // Class Solution
 
 //非递归
+
 class Solution {
   public:
     int coinChange(vector<int>& coins, int amount) {
         sort(coins.begin(), coins.end());
-        vector<int> dp(amount + 1, -1);
+        vector<int> dp(amount + 1, 1000000);
         dp[0] = 0;
         for (int i = 0; i < coins.size(); ++i) {
             if (coins[i] <= amount) {
                 dp[coins[i]] = 1;
             }
         }
-
         for (int i = 1; i <= amount; ++i) {
-            for (int k = coins[0]; k < i - coins[0]; ++k) {
-                if (dp[k] != -1 && dp[i - k] != -1) {
-                    if (dp[i] != -1) {
-                        dp[i] = min(dp[i], dp[k] + dp[i - k]);
-                    }
-                    else {
-                        dp[i] = dp[k] + dp[i - k];
-                    }
+            for (int k = 0; k < coins.size() && coins[k] <= amount; ++k) {
+                if (i - coins[k] >= 0) {
+                    dp[i] = min(dp[i], dp[coins[k]] + dp[i - coins[k]]);
                 }
             }
         }
-        return dp[amount];
+        return dp[amount] == 1000000 ? -1 : dp[amount];
     }
 };
 
