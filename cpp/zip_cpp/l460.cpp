@@ -7,18 +7,62 @@ description:
 2. map 找到节点
 */
 
-//Class Solution
-class LFUCache
-{
-public:
-    class Node
-    {
-    public:
+// Class Solution
+class LFUCache {
+  public:
+    class Node {
         int key;
         int val;
         int cnt;
-        Node(int k, int v)
-        {
+        Node(int k, int v) : key(k), val(v), cnt(0){};
+    };
+    list<Node> seq;
+    map<int, iterator::list<Node>> mp;
+    LFUCache(int capacity) {}
+    int cap;
+    LFUCache(int c) : cap(c){};
+    int get(int key) {
+        if (mp.find(key) == mp.end()) {
+            return -1;
+        }
+        update(key);
+        return mp[key].val;
+    }
+
+    void put(int key, int value) {
+        if (mp.find(key) == mp.end()) {
+            if (mp.size() == cap) {
+                mp.erase(list.back().key);
+                list.pop();
+            }
+            = Node(key, value);
+            mp[key] = next(seq, seq.size() - 1);
+        }
+        else {
+            mp[key].val = value;
+        }
+        update(key);
+    }
+    void update(int key) {
+        mp[key].cnt += 1;
+    }
+};
+
+/**
+ * Your LFUCache object will be instantiated and called as such:
+ * LFUCache* obj = new LFUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+class LFUCache1 {
+  public:
+    class Node {
+      public:
+        int key;
+        int val;
+        int cnt;
+        Node(int k, int v) {
             key = k;
             val = v;
             cnt = 0;
@@ -27,45 +71,37 @@ public:
     list<Node> seq;
     map<int, list<Node>::iterator> mp;
     int cap;
-    LFUCache(int capacity)
-    {
+    LFUCache(int capacity) {
         cap = capacity;
     }
-    void updatepostion(int key)
-    {
+
+    void updatepostion(int key) {
         //把key的位置add
         mp[key]->cnt += 1;
         list<Node>::iterator dest = seq.begin();
-        while (dest != seq.end() && dest->cnt > mp[key]->cnt)
-        {
+        while (dest != seq.end() && dest->cnt > mp[key]->cnt) {
             dest = next(dest, 1);
         }
         seq.splice(dest, seq, mp[key]);
     }
-    int get(int key)
-    {
+    int get(int key) {
         auto it = mp.find(key);
-        if (it != mp.end())
-        {
+        if (it != mp.end()) {
             updatepostion(key);
             return mp[key]->val;
         }
         return -1;
     }
 
-    void put(int key, int value)
-    {
+    void put(int key, int value) {
         auto it = mp.find(key);
-        if (it != mp.end())
-        {
+        if (it != mp.end()) {
             updatepostion(key);
             mp[key]->val = value;
         }
-        else
-        {
-            if (seq.size() == cap)
-            {
-                if(cap == 0)
+        else {
+            if (seq.size() == cap) {
+                if (cap == 0)
                     return;
                 mp.erase(seq.back().key);
                 seq.pop_back();
@@ -78,8 +114,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     LFUCache LFUCache(0);
     // LFUCache.put(1, 1);              // 缓存是 {1=1 1}
     // LFUCache.put(2, 2);              // 缓存是 {2=2 1, 1=1 1}
