@@ -13,11 +13,11 @@ class LFUCache {
         int key;
         int val;
         int cnt;
-        int time;
-        Node(int k, int v, int t) : key(k), val(v), time(t), cnt(1) {}
+        Node(int k, int v, int t) : key(k), val(v), cnt(1) {}
     };
     int cap{0};
     int time{0};
+    int mincnt{0};
     unordered_map<int, list<Node>> freq;
     unordered_map<int, list<Node>::iterator> mp;
     LFUCache(int c) : cap(c) {}
@@ -26,8 +26,14 @@ class LFUCache {
         if (it == mp.end()) {
             return -1;
         }
-        update(key);
-        return mp->val;
+        freq[it->second->cnt].erase(it->second);
+        if (freq.find(++(it->second->cnt)) != freq.end()) {
+            freq[it->second->cnt].push_back(it->second);
+        }
+        else {
+            // freq[it->second->cnt] = list<Node>(it->second);
+        }
+        return it->second->val;
     }
     void put(int key, int value) {
         if (cap == 0) {
@@ -37,9 +43,6 @@ class LFUCache {
         if (it == mp.end()) {
             auto first = freq.begin();
         }
-    }
-    void update(int key) {
-        // update cnt time
     }
 };
 
