@@ -3,58 +3,118 @@ using namespace std;
 
 /*
 description:
-1. list 标记节点顺序
+1. set 标记节点顺序
 2. map 找到节点
 */
-
-// Class Solution
 class LFUCache {
   public:
     class Node {
+      public:
         int key;
         int val;
         int cnt;
-        Node(int k, int v) : key(k), val(v), cnt(0){};
+        int time;
+        Node(int k, int v, int t) : key(k), val(v), time(t), cnt(1) {}
     };
-    list<Node> seq;
-    map<int, iterator::list<Node>> mp;
-    LFUCache(int capacity) {}
-    int cap;
-    LFUCache(int c) : cap(c){};
+    int cap{0};
+    int time{0};
+    unordered_map<int, list<Node>> freq;
+    unordered_map<int, list<Node>::iterator> mp;
+    LFUCache(int c) : cap(c) {}
     int get(int key) {
-        if (mp.find(key) == mp.end()) {
+        auto it = mp.find(key);
+        if (it == mp.end()) {
             return -1;
         }
         update(key);
-        return mp[key].val;
+        return mp->val;
     }
-
     void put(int key, int value) {
-        if (mp.find(key) == mp.end()) {
-            if (mp.size() == cap) {
-                mp.erase(list.back().key);
-                list.pop();
-            }
-            = Node(key, value);
-            mp[key] = next(seq, seq.size() - 1);
+        if (cap == 0) {
+            return;
         }
-        else {
-            mp[key].val = value;
+        auto it = mp.find(key);
+        if (it == mp.end()) {
+            auto first = freq.begin();
         }
-        update(key);
     }
     void update(int key) {
-        mp[key].cnt += 1;
+        // update cnt time
     }
 };
 
-/**
- * Your LFUCache object will be instantiated and called as such:
- * LFUCache* obj = new LFUCache(capacity);
- * int param_1 = obj->get(key);
- * obj->put(key,value);
- */
+/*
+description:
+1. set 标记节点顺序
+2. map 找到节点
+*/
+class LFUCache2 {
+  public:
+    class Node {
+      public:
+        int key;
+        int val;
+        int time;
+        int cnt;
+        Node(int k, int v, int t) : key(k), val(v), time(t), cnt(1){};
+        bool operator<(const Node& node) const {
+            return cnt == node.cnt ? time < node.time : cnt < node.cnt;
+        }
+        Node(){};
+    };
+    int cap{0};
+    int time{0};
+    set<Node> s;
+    unordered_map<int, Node> mp;
 
+    LFUCache2(int capacity) {
+        cap = capacity;
+    }
+    int get(int key) {
+        auto it = mp.find(key);
+        if (it == mp.end()) {
+            return -1;
+        }
+        s.erase(it->second);
+        it->second.time = ++time;
+        it->second.cnt += 1;
+        s.insert(it->second);
+        return it->second.val;
+    }
+
+    void put(int key, int value) {
+        if (cap == 0) {
+            return;
+        }
+        auto it = mp.find(key);
+        if (it != mp.end()) {
+            s.erase(it->second);
+            it->second.val = value;
+            it->second.time = ++time;
+            it->second.cnt += 1;
+            s.insert(it->second);
+        }
+        else {
+            if (mp.size() == cap) {
+                mp.erase(s.begin()->key);
+                s.erase(s.begin());
+            }
+            Node node(key, value, ++time);
+            mp[key] = node;
+            s.insert(node);
+        }
+    }
+};
+
+/*
+
+ old:new 2:2 3:3 4:4
+
+
+description:
+1. list 标记节点顺序
+2. map 找到节点
+*/
 class LFUCache1 {
   public:
     class Node {
@@ -71,7 +131,7 @@ class LFUCache1 {
     list<Node> seq;
     map<int, list<Node>::iterator> mp;
     int cap;
-    LFUCache(int capacity) {
+    LFUCache1(int capacity) {
         cap = capacity;
     }
 
@@ -115,17 +175,20 @@ class LFUCache1 {
 };
 
 int main() {
-    LFUCache LFUCache(0);
-    // LFUCache.put(1, 1);              // 缓存是 {1=1 1}
-    // LFUCache.put(2, 2);              // 缓存是 {2=2 1, 1=1 1}
-    // cout << LFUCache.get(1) << endl; // 返回 1 缓存是 {1=1 2, 2=2 1}
-    // LFUCache.put(3, 3);              // 该操作会使得关键字 2 作废，缓存是 {1=1 2, 3=3 1}
-    // cout << LFUCache.get(2) << endl; // 返回 -1 (未找到)
-    // LFUCache.put(4, 4);              // 该操作会使得关键字 1 作废，缓存是 {1=1 2, 4=4 1}
-    // cout << LFUCache.get(1) << endl; // 返回 1 {1=1 3, 4=4 1}
-    // cout << LFUCache.get(3) << endl; // 返回 -1 (未找到)
-    // cout << LFUCache.get(4) << endl; // 返回 4 {1=1 3, 4=4 2}
-    LFUCache.put(0, 0);
-    cout << LFUCache.get(0) << endl;
+    LFUCache LFUCache(3);
+    LFUCache.put(2, 2);               // 缓存是 {2=2 1, 1=1 1}
+    LFUCache.put(1, 1);               // 缓存是 {1=1 1}
+    cout << LFUCache.get(2) << endl;  // 返回 1 缓存是 {1=1 2, 2=2 1}
+    cout << LFUCache.get(1) << endl;  // 返回 1 缓存是 {1=1 2, 2=2 1}
+    cout << LFUCache.get(2) << endl;  // 返回 -1 (未找到)
+    LFUCache.put(3, 3);               // 该操作会使得关键字 2 作废，缓存是 {1=1 2, 3=3 1}
+    LFUCache.put(4, 4);               // 该操作会使得关键字 1 作废，缓存是 {1=1 2, 4=4 1}
+    cout << LFUCache.get(3) << endl;  // 返回 -1 (未找到)
+    cout << LFUCache.get(2) << endl;  // 返回 -1 (未找到)
+    cout << LFUCache.get(1) << endl;  // 返回 1 {1=1 3, 4=4 1}
+    cout << LFUCache.get(4) << endl;  // 返回 4 {1=1 3, 4=4 2}
+    // LFUCache.put(0, 0);
+    // LFUCache.put(1, 0);
+    // cout << LFUCache.get(0) << endl;
     return 0;
 }
