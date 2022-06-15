@@ -10,6 +10,7 @@ description:
 class LFUCache {
   public:
     class Node {
+      public:
         int key;
         int val;
         int cnt;
@@ -25,10 +26,36 @@ class LFUCache {
         if (it == mp.end()) {
             return -1;
         }
-
+        freq[it->second->cnt + 1].splice(freq[it->second->cnt + 1].begin(), freq[it->second->cnt], it->second);
+        if (it->second->cnt == minval) {
+            minval += 1;
+        }
+        it->second->cnt += 1;
         return it->second->val;
     }
-    void put(int key, int value) {}
+    void put(int key, int value) {
+        if (cap == 0) {
+            return;
+        }
+        auto it = mp.find(key);
+        if (it == mp.end()) {
+            mp.erase(freq[minval].back().key);
+            freq[minval].pop_back();
+
+            minval = 1;
+            Node node(key, value);
+            freq[minval].insert(freq[minval].begin(), node);
+            mp[key] = freq[minval].begin();
+        }
+        else {
+            freq[it->second->cnt + 1].splice(freq[it->second->cnt + 1].begin(), freq[it->second->cnt], it->second);
+            if (it->second->cnt == minval) {
+                minval += 1;
+            }
+            it->second->cnt += 1;
+            it->second->val = value;
+        }
+    }
 };
 //再写一次
 class LFUCache3 {
@@ -75,9 +102,7 @@ class LFUCache3 {
             mp[key] = freq[mincnt].begin();
         }
         else {
-            //将下一层的node 移动到上一层
             freq[it->second->cnt + 1].splice(freq[it->second->cnt + 1].begin(), freq[it->second->cnt], it->second);
-            //维护最小的cnt
             if (mincnt == it->second->cnt && freq[it->second->cnt].size() == 0) {
                 mincnt += 1;
             }
