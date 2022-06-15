@@ -6,33 +6,57 @@ description:
 1. set 标记节点顺序
 2. map 找到节点
 */
+// 23.45
 class LFUCache {
+  public:
+    class Node {
+        int key;
+        int val;
+        int cnt;
+        Node(int k, int v) : key(k), val(v), cnt(1) {}
+    };
+    int cap{0};
+    int minval{1};
+    LFUCache(int c) : cap(c) {}
+    unordered_map<int, list<Node>> freq;
+    unordered_map<int, list<Node>::iterator> mp;
+    int get(int key) {
+        auto it = mp.find(key);
+        if (it == mp.end()) {
+            return -1;
+        }
+
+        return it->second->val;
+    }
+    void put(int key, int value) {}
+};
+//再写一次
+class LFUCache3 {
   public:
     class Node {
       public:
         int key;
         int val;
         int cnt;
-        Node(int k, int v, int t) : key(k), val(v), cnt(1) {}
+        Node(int k, int v) : key(k), val(v), cnt(1) {}
     };
     int cap{0};
-    int time{0};
     int mincnt{0};
-    unordered_map<int, list<Node>> freq;
-    unordered_map<int, list<Node>::iterator> mp;
-    LFUCache(int c) : cap(c) {}
+    unordered_map<int, list<Node>> freq;          // cnt: list<node>
+    unordered_map<int, list<Node>::iterator> mp;  // key: *node
+    LFUCache3(int c) : cap(c) {}
     int get(int key) {
         auto it = mp.find(key);
         if (it == mp.end()) {
             return -1;
         }
-        freq[it->second->cnt].erase(it->second);
-        if (freq.find(++(it->second->cnt)) != freq.end()) {
-            freq[it->second->cnt].push_back(it->second);
+        //将下一层的node 移动到上一层
+        freq[it->second->cnt + 1].splice(freq[it->second->cnt + 1].begin(), freq[it->second->cnt], it->second);
+        //维护最小的cnt
+        if (mincnt == it->second->cnt && freq[it->second->cnt].size() == 0) {
+            mincnt += 1;
         }
-        else {
-            // freq[it->second->cnt] = list<Node>(it->second);
-        }
+        it->second->cnt += 1;
         return it->second->val;
     }
     void put(int key, int value) {
@@ -41,7 +65,24 @@ class LFUCache {
         }
         auto it = mp.find(key);
         if (it == mp.end()) {
-            auto first = freq.begin();
+            if (cap == mp.size()) {
+                mp.erase(freq[mincnt].back().key);
+                freq[mincnt].pop_back();
+            }
+            Node node(key, value);
+            mincnt = 1;
+            freq[mincnt].insert(freq[mincnt].begin(), node);
+            mp[key] = freq[mincnt].begin();
+        }
+        else {
+            //将下一层的node 移动到上一层
+            freq[it->second->cnt + 1].splice(freq[it->second->cnt + 1].begin(), freq[it->second->cnt], it->second);
+            //维护最小的cnt
+            if (mincnt == it->second->cnt && freq[it->second->cnt].size() == 0) {
+                mincnt += 1;
+            }
+            mp[key]->cnt += 1;
+            mp[key]->val = value;
         }
     }
 };
@@ -178,20 +219,69 @@ class LFUCache1 {
 };
 
 int main() {
-    LFUCache LFUCache(3);
-    LFUCache.put(2, 2);               // 缓存是 {2=2 1, 1=1 1}
-    LFUCache.put(1, 1);               // 缓存是 {1=1 1}
-    cout << LFUCache.get(2) << endl;  // 返回 1 缓存是 {1=1 2, 2=2 1}
-    cout << LFUCache.get(1) << endl;  // 返回 1 缓存是 {1=1 2, 2=2 1}
-    cout << LFUCache.get(2) << endl;  // 返回 -1 (未找到)
-    LFUCache.put(3, 3);               // 该操作会使得关键字 2 作废，缓存是 {1=1 2, 3=3 1}
-    LFUCache.put(4, 4);               // 该操作会使得关键字 1 作废，缓存是 {1=1 2, 4=4 1}
-    cout << LFUCache.get(3) << endl;  // 返回 -1 (未找到)
-    cout << LFUCache.get(2) << endl;  // 返回 -1 (未找到)
-    cout << LFUCache.get(1) << endl;  // 返回 1 {1=1 3, 4=4 1}
-    cout << LFUCache.get(4) << endl;  // 返回 4 {1=1 3, 4=4 2}
-    // LFUCache.put(0, 0);
-    // LFUCache.put(1, 0);
-    // cout << LFUCache.get(0) << endl;
+    LFUCache LFUCache(10);
+    vector<vector<int>> vec = {
+        {10, 13}, {3, 17}, {6, 11}, {10, 5}, {9, 10},  {13},    {2, 19}, {2},     {3},     {5, 25},  {8},     {9, 22},
+        {5, 5},   {1, 30}, {11},    {9, 12}, {7},      {5},     {8},     {9},     {4, 30}, {9, 3},   {9},     {10},
+        {10},     {6, 14}, {3, 1},  {3},     {10, 11}, {8},     {2, 14}, {1},     {5},     {4},      {11, 4}, {12, 24},
+        {5, 18},  {13},    {7, 23}, {8},     {12},     {3, 27}, {2, 12}, {5},     {2, 9},  {13, 4},  {8, 18}, {1, 7},
+        {6},      {9, 29}, {8, 21}, {5},     {6, 30},  {1, 12}, {10},    {4, 15}, {7, 22}, {11, 26}, {8, 17}, {9, 29},
+    };
+
+    // vector<vector<int>> vec = {
+    //     {10, 13}, {3, 17}, {6, 11},  {10, 5},  {9, 10}, {13},    {2, 19},  {2},      {3},      {5, 25}, {8},
+    //     {9, 22},  {5, 5},  {1, 30},  {11},     {9, 12}, {7},     {5},      {8},      {9},      {4, 30}, {9, 3},
+    //     {9},      {10},    {10},     {6, 14},  {3, 1},  {3},     {10, 11}, {8},      {2, 14},  {1},     {5},
+    //     {4},      {11, 4}, {12, 24}, {5, 18},  {13},    {7, 23}, {8},      {12},     {3, 27},  {2, 12}, {5},
+    //     {2, 9},   {13, 4}, {8, 18},  {1, 7},   {6},     {9, 29}, {8, 21},  {5},      {6, 30},  {1, 12}, {10},
+    //     {4, 15},  {7, 22}, {11, 26}, {8, 17},  {9, 29}, {5},     {3, 4},   {11, 30}, {12},     {4, 29}, {3},
+    //     {9},      {6},     {3, 4},   {1},      {10},    {3, 29}, {10, 28}, {1, 20},  {11, 13}, {3},     {3, 12},
+    //     {3, 8},   {10, 9}, {3, 26},  {8},      {7},     {5},     {13, 17}, {2, 27},  {11, 15}, {12},    {9, 19},
+    //     {2, 15},  {3, 16}, {1},      {12, 17}, {9, 1},  {6, 19}, {4},      {5},      {5},      {8, 1},  {11, 7},
+    //     {5, 2},   {9, 28}, {1},      {2, 2},   {7, 4},  {4, 22}, {7, 24},  {9, 26},  {13, 28}, {11, 26}};
+    int cnt = 0;
+    for (auto c : vec) {
+        if (c.size() == 2) {
+            LFUCache.put(c[0], c[1]);
+        }
+        else {
+            cout << "cnt:" << ++cnt << " key:" << c[0] << " val:" << LFUCache.get(c[0]) << endl;
+        }
+    }
+    // LFUCache LFUCache(3);
+    // LFUCache.put(1, 1);
+    // LFUCache.put(2, 2);
+    // LFUCache.put(3, 3);
+    // LFUCache.put(4, 4);
+    // cout << LFUCache.get(4) << endl;
+    // cout << LFUCache.get(3) << endl;
+    // cout << LFUCache.get(2) << endl;
+    // cout << LFUCache.get(1) << endl;
+    // // 4 3 2 -1
+
+    // LFUCache LFUCache(2);
+    // LFUCache.put(1, 1);               // 缓存是 {2=2 1}
+    // LFUCache.put(2, 2);               // 缓存是 {1=1 1, 2=2 1}
+    // cout << LFUCache.get(1) << endl;  // 返回 2 {2=2 2, 1=1 1}
+    // LFUCache.put(3, 3);               // 缓存是 {2=2 3, 1=1 2, 3=3 1}
+    // cout << LFUCache.get(2) << endl;  // 返回 2 {2=2 2, 1=1 1}
+    // cout << LFUCache.get(3) << endl;  // 返回 2 {2=2 2, 1=1 1}
+    // LFUCache.put(4, 4);               // 该操作会使得关键字 3 作废，缓存是 {2=2 3, 1=1 2, 4=4 1}
+    // cout << LFUCache.get(1) << endl;  // 返回 -1 (未找到)
+    // cout << LFUCache.get(3) << endl;  // 返回 2 缓存是{2=2 4, 1=1 2, 4=4 1}
+    // cout << LFUCache.get(4) << endl;  // 返回 4 缓存是{2=2 4, 1=1 3, 4=4 2}
+
+    // LFUCache LFUCache(3);
+    // LFUCache.put(2, 2);               // 缓存是 {2=2 1}
+    // LFUCache.put(1, 1);               // 缓存是 {1=1 1, 2=2 1}
+    // cout << LFUCache.get(2) << endl;  // 返回 2 {2=2 2, 1=1 1}
+    // cout << LFUCache.get(1) << endl;  // 返回 1 {1=1 2, 2=2 2}
+    // cout << LFUCache.get(2) << endl;  // 返回 2 {2=2 3, 1=1 2}
+    // LFUCache.put(3, 3);               // 缓存是 {2=2 3, 1=1 2, 3=3 1}
+    // LFUCache.put(4, 4);               // 该操作会使得关键字 3 作废，缓存是 {2=2 3, 1=1 2, 4=4 1}
+    // cout << LFUCache.get(3) << endl;  // 返回 -1 (未找到)
+    // cout << LFUCache.get(2) << endl;  // 返回 2 缓存是{2=2 4, 1=1 2, 4=4 1}
+    // cout << LFUCache.get(1) << endl;  // 返回 1 缓存是{2=2 4, 1=1 3, 4=4 1}
+    // cout << LFUCache.get(4) << endl;  // 返回 4 缓存是{2=2 4, 1=1 3, 4=4 2}
     return 0;
 }
