@@ -27,7 +27,7 @@ class LFUCache {
             return -1;
         }
         freq[it->second->cnt + 1].splice(freq[it->second->cnt + 1].begin(), freq[it->second->cnt], it->second);
-        if (it->second->cnt == minval) {
+        if (it->second->cnt == minval && freq[minval].size() == 0) {
             minval += 1;
         }
         it->second->cnt += 1;
@@ -39,9 +39,10 @@ class LFUCache {
         }
         auto it = mp.find(key);
         if (it == mp.end()) {
-            mp.erase(freq[minval].back().key);
-            freq[minval].pop_back();
-
+            if (cap == mp.size()) {
+                mp.erase(freq[minval].back().key);
+                freq[minval].pop_back();
+            }
             minval = 1;
             Node node(key, value);
             freq[minval].insert(freq[minval].begin(), node);
@@ -49,7 +50,7 @@ class LFUCache {
         }
         else {
             freq[it->second->cnt + 1].splice(freq[it->second->cnt + 1].begin(), freq[it->second->cnt], it->second);
-            if (it->second->cnt == minval) {
+            if (it->second->cnt == minval && freq[minval].size() == 0) {
                 minval += 1;
             }
             it->second->cnt += 1;
@@ -244,7 +245,7 @@ class LFUCache1 {
 };
 
 int main() {
-    LFUCache LFUCache(10);
+    LFUCache3 LFUCache(10);
     vector<vector<int>> vec = {
         {10, 13}, {3, 17}, {6, 11}, {10, 5}, {9, 10},  {13},    {2, 19}, {2},     {3},     {5, 25},  {8},     {9, 22},
         {5, 5},   {1, 30}, {11},    {9, 12}, {7},      {5},     {8},     {9},     {4, 30}, {9, 3},   {9},     {10},
