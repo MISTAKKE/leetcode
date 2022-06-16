@@ -10,68 +10,36 @@ description:
 
 */
 
-//Class Solution
+// Class Solution
 
-class Solution
-{
-public:
-    int numComponents(ListNode *head, vector<int> &nums)
-    {
-        int cnt = 0;
-        map<int, int> mp;
-        while (head != NULL)
-        {
-            mp[head->val] = cnt;
-            cnt += 1;
+class Solution {
+  public:
+    int numComponents(ListNode* head, vector<int>& nums) {
+        vector<bool> exist(10000, false);
+        for (auto c : nums) {
+            exist[c] = true;
+        }
+        int res = 0;
+        while (head != nullptr) {
+            if (exist[head->val] && (head->next == nullptr || !exist[head->next->val])) {
+                res += 1;
+            }
             head = head->next;
         }
-        vector<bool> vec(cnt, false);
-        for (auto c : nums)
-        {
-            if(mp.find(c) != mp.end())
-            {
-                vec[mp[c]] = true;
-            }
-        }
-        int maxlen = 1;// 1 <= G.length <= 10000
-        int cntofnow = 0;
-        int nowlen= 0;
-        vec.push_back(false);
-        for(int i = 0;i<cnt;++i)
-        {
-            if(vec[i])
-            {
-                nowlen+=1;
-            }
-            else
-            {
-                if(nowlen > maxlen)
-                {
-                    maxlen = nowlen;
-                    cntofnow = 1;
-                }
-                else if(maxlen == nowlen)
-                {
-                    cntofnow +=1;
-                }
-                nowlen = 0;
-            }
-        }
-        return cntofnow;
+        return res;
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
 
-    ListNode *l = new ListNode(2);
-    ListNode *l2 = new ListNode(3);
-    ListNode *l3 = new ListNode(1);
+    ListNode* l = new ListNode(2);
+    ListNode* l2 = new ListNode(3);
+    ListNode* l3 = new ListNode(1);
     l->next = l2;
     l2->next = l3;
 
-    vector<int>vec{2,1,3};
-    cout<<A.numComponents(l, vec)<<endl;
+    vector<int> vec{2, 1, 3};
+    cout << A.numComponents(l, vec) << endl;
     return 0;
 }
