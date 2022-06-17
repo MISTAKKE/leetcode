@@ -33,13 +33,8 @@ class Solution {
 int main() {
     Solution A;
 
-    ListNode* l = new ListNode(2);
-    ListNode* l2 = new ListNode(3);
-    ListNode* l3 = new ListNode(1);
-    l->next = l2;
-    l2->next = l3;
-
-    vector<int> vec{2, 1, 3};
-    cout << A.numComponents(l, vec) << endl;
+    ListNode* p = MakeListNode({0, 1, 2, 3});
+    vector<int> vec{2, 3, 0};
+    cout << A.numComponents(p, vec) << endl;
     return 0;
 }
