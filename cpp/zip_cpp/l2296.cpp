@@ -54,19 +54,53 @@ class TextEditor {
   public:
     std::string data;
     TextEditor() {
-        data = "|";
+        data = "";
+        idx = 0;
     }
-    int idx = 0;
+    int idx{0};
 
     void addText(string text) {
         data.insert(idx, text);
+        idx += text.size();
     }
 
-    int deleteText(int k) {}
+    int deleteText(int k) {
+        int cnt = 0;
+        if (idx > k) {
+            // "012" k=1 idx=3
+            data.erase(idx - k, k);
+            idx -= k;
+            cnt = k;
+        }
+        else {
+            data.erase(0, idx);
+            cnt = idx;
+            idx = 0;
+        }
+        return cnt;
+    }
 
-    string cursorLeft(int k) {}
+    string cursorLeft(int k) {
+        if (idx > k) {
+            idx -= k;
+        }
+        else {
+            idx = 0;
+        }
+        int len = min(10, idx);
+        return data.substr(idx - len, len);
+    }
 
-    string cursorRight(int k) {}
+    string cursorRight(int k) {
+        if (data.size() - idx > k) {
+            idx += k;
+        }
+        else {
+            idx = data.size();
+        }
+        int len = min(10, idx);
+        return data.substr(idx - len, len);
+    }
 };
 
 //双栈
