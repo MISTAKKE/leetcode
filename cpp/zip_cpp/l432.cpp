@@ -10,11 +10,58 @@ description:
 // Class Solution
 class AllOne {
   public:
-    AllOne() {}
-    void inc(string key) {}
+    class Node {
+      public:
+        vector<string> vec{};
+        int cnt{0};
+        Node* prev{nullptr};
+        Node* next{nullptr};
+        Node(int c) : cnt(c) {}
+    };
+    map<string, Node*> mp;
+    Node* head;
+    AllOne() {
+        head = new Node(0);
+    }
+    ~AllOne() {
+        while (head != nullptr) {
+            Node* t = head->next;
+            delete head;
+            head = t;
+        }
+    }
+    void inc(string key) {
+        auto it = mp.find(key);
+        if (it == mp.end()) {
+            // 1. key以前不存在
+            // 1.1 cnt==0 为空
+            if (head->next == nullptr || head->next->cnt != 1) {
+                Node* = t new Node(1);
+                t->next = head->next;
+                if (head->next != nullptr) {
+                    head->next->prev = t;
+                }
+                head->next = t;
+                t->prev = head;
+            }
+            // 1.2 cnt==0 不为空
+            head->next->vec.push_back(key);
+            mp[key] = head->next;
+            return;
+        }
+        else {
+            // 2. key以前存在
+            int key = it->first;
+            Node* t = it->second;
+        }
+    }
     void dec(string key) {}
-    string getMaxKey() {}
-    string getMinKey() {}
+    string getMaxKey() {
+        return "";
+    }
+    string getMinKey() {
+        return "";
+    }
 };
 
 // 2 maps
@@ -101,8 +148,8 @@ int main() {
     obj->dec("456");
     cout << obj->getMaxKey() << endl;
     cout << obj->getMinKey() << endl;
-    for (auto c : obj->freq) {
-        cout << "cnt:" << c.first << " size:" << c.second.size() << endl;
-    }
+    // for (auto c : obj->freq) {
+    //     cout << "cnt:" << c.first << " size:" << c.second.size() << endl;
+    // }
     return 0;
 }
