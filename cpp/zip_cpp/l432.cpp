@@ -12,7 +12,7 @@ class AllOne {
   public:
     class Node {
       public:
-        vector<string> vec{};
+        set<string> vec{};
         int cnt{0};
         Node* prev{nullptr};
         Node* next{nullptr};
@@ -22,44 +22,79 @@ class AllOne {
     Node* head;
     AllOne() {
         head = new Node(0);
+        head->next = head;
+        head->prev = head;
     }
     ~AllOne() {
-        while (head != nullptr) {
-            Node* t = head->next;
-            delete head;
-            head = t;
+        Node* t = head->next;
+        while (t != head) {
+            Node* temp = t->next;
+            delete t;
+            t = temp;
         }
+        delete head;
     }
     void inc(string key) {
         auto it = mp.find(key);
-        if (it == mp.end()) {
-            // 1. key以前不存在
-            // 1.1 cnt==0 为空
-            if (head->next == nullptr || head->next->cnt != 1) {
-                Node* = t new Node(1);
-                t->next = head->next;
-                if (head->next != nullptr) {
-                    head->next->prev = t;
-                }
-                head->next = t;
-                t->prev = head;
-            }
-            // 1.2 cnt==0 不为空
-            head->next->vec.push_back(key);
-            mp[key] = head->next;
-            return;
+        Node* now = head;
+        if (it != mp.end()) {
+            now = it->second;
         }
-        else {
-            // 2. key以前存在
-            int key = it->first;
-            Node* t = it->second;
+        // 在now后增加新的(可能加节点)
+        if (now->next == head || now->next->cnt != now->cnt + 1) {
+            Node* t = new Node(now->cnt + 1);
+            t->next = now->next;
+            now->next->prev = t;
+            now->next = t;
+            t->prev = now;
+        }
+        now->next->vec.insert(key);
+        mp[key] = now->next;
+        // 删除旧的(可能删节点)
+        if (now->cnt != 0) {
+            now->vec.erase(key);
+            if (now->vec.size() == 0) {
+                now->prev->next = now->next;
+                now->next->prev = now->prev;
+                delete now;
+            }
         }
     }
-    void dec(string key) {}
+    void dec(string key) {
+        Node* now = mp[key];
+        //在now前新增一个(可能加节点 如果当前cnt==1就不加)
+        if ((now->prev == head || now->prev->cnt != now->cnt - 1) && now->cnt != 1) {
+            Node* t = new Node(now->cnt - 1);
+            now->prev->next = t;
+            t->prev = now->prev;
+            now->prev = t;
+            t->next = now;
+        }
+        if (now->cnt != 1) {
+            now->prev->vec.insert(key);
+            mp[key] = now->prev;
+        }
+        else {
+            mp.erase(key);
+        }
+        //删除旧的(可能删)
+        now->vec.erase(key);
+        if (now->vec.size() == 0) {
+            now->prev->next = now->next;
+            now->next->prev = now->prev;
+            delete now;
+        }
+    }
     string getMaxKey() {
+        if (head->prev != head) {
+            return *(head->prev->vec.begin());
+        }
         return "";
     }
     string getMinKey() {
+        if (head->next != head) {
+            return *(head->next->vec.begin());
+        }
         return "";
     }
 };
@@ -69,7 +104,7 @@ class AllOne1 {
   public:
     map<string, int> mp;
     map<int, list<string>> freq;
-    AllOne() {}
+    AllOne1() {}
 
     void inc(string key) {
         auto it = mp.find(key);
@@ -138,18 +173,27 @@ class AllOne1 {
 
 int main() {
     AllOne* obj = new AllOne();
-    obj->inc("123");
-    obj->inc("123");
-    obj->inc("456");
-    obj->inc("456");
-    obj->inc("456");
-    obj->dec("456");
-    obj->dec("456");
-    obj->dec("456");
+    obj->inc("hello");
+    obj->inc("hello");
     cout << obj->getMaxKey() << endl;
     cout << obj->getMinKey() << endl;
-    // for (auto c : obj->freq) {
-    //     cout << "cnt:" << c.first << " size:" << c.second.size() << endl;
-    // }
+
+    obj->inc("leet");
+    cout << obj->getMaxKey() << endl;
+    cout << obj->getMinKey() << endl;
+
+    // case1
+    //  for (auto c : obj->freq) {
+    //      cout << "cnt:" << c.first << " size:" << c.second.size() << endl;
+    //  }
+
+    // case2
+    AllOne::Node* t = obj->head;
+    cout << "cnt:" << t->cnt << " size:" << t->vec.size() << endl;
+    t = t->next;
+    while (t != obj->head) {
+        cout << "cnt:" << t->cnt << " size:" << t->vec.size() << endl;
+        t = t->next;
+    }
     return 0;
 }
