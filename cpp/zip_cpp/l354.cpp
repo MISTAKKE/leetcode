@@ -50,10 +50,17 @@ class Solution_better {
             return 1;
         }
         sort(envelopes.begin(), envelopes.end(), comp);
-        vector<int> res{envelopes[1]};
+        vector<int> res{envelopes[0][1]};
         for (auto c : envelopes) {
-            if (c[0] >)
+            if (c[1] > res.back()) {
+                res.push_back(c[1]);
+            }
+            else if (c[1] < res.back()) {
+                int idx = lower_bound(res.begin(), res.end(), c[1]) - res.begin();
+                res[idx] = c[1];
+            }
         }
+        return res.size();
     }
 };
 
@@ -87,7 +94,7 @@ class Solution {
     }
 };
 int main() {
-    Solution A;
+    Solution_better A;
     vector<vector<int>> envelopes{{1, 8}, {2, 5}, {6, 4}, {6, 7}, {5, 2}, {5, 4}, {2, 10}, {1, 1}};
     cout << A.maxEnvelopes(envelopes) << endl;
 
