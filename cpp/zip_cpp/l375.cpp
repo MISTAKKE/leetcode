@@ -13,12 +13,25 @@ class Solution {
   public:
     int getMoneyAmount(int n) {
         vector<vector<int>> dp(n + 1, vector<int>(n + 1, 0));
+        for (int i = 1; i <= n; ++i) {
+            dp[i][i] = 0;
+        }
         for (int i = 1; i <= n; ++i) {     // i = 1 .. n-1
             for (int k = 1; k < i; ++k) {  // k = 1 .. n-1
                 int row = i - k;
                 int col = i;
+                // cout << "row:" << row << " col:" << col << endl;
                 if (col - row == 1) {
                     dp[row][col] = row;
+                }
+                else if (col - row == 2) {
+                    dp[row][col] = row + 1;
+                }
+                else if (col - row == 3) {
+                    dp[row][col] = 2 * row + 2;
+                }
+                else if (col - row == 4) {
+                    dp[row][col] = 2 * row + 4;
                 }
                 else {
                     int minval = col + dp[row][col - 1];
@@ -32,7 +45,7 @@ class Solution {
                 }
             }
         }
-        show(dp);
+        // show(dp);
         return dp[1][n];
     }
 };
