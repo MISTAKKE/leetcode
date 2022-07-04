@@ -11,14 +11,15 @@ description:
 
 class Solution {
   public:
-    int c(int n, int m) {
+    int func(int n, int m) {
         long long int res = 1;
-        for (int i = n; i >= m; --i) {
+        for (int i = n; i > n - m; --i) {
             res *= i;
         }
         for (int i = 1; i <= m; ++i) {
             res /= i;
         }
+        return res;
     }
     int numberOfArithmeticSlices(vector<int>& nums) {
         vector<map<int, int>> mp(nums.size(), map<int, int>{});
@@ -34,9 +35,10 @@ class Solution {
             cout << "c:" << c << " gap:" << gap << endl;
         }
         for (auto c : mp[nums.size() - 1]) {
-            int gap = c.second;
-            if (gap >= 2) {
-                res += (gap * (gap - 1) * (gap - 2) / 6);
+            int gap = c.second + 1;
+            cout << "gap:" << gap - 1 << endl;
+            for (int k = 3; k <= gap; ++k) {  // gap个0
+                res = res + func(gap, k);
             }
         }
         return res;
@@ -44,7 +46,7 @@ class Solution {
 };
 int main() {
     Solution A;
-    vector<int> nums{7, 7, 7, 7, 7};
+    vector<int> nums{2, 4, 6, 8, 10};
     cout << A.numberOfArithmeticSlices(nums) << endl;
 
     return 0;
