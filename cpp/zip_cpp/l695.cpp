@@ -17,7 +17,7 @@ class Solution {
         vector<int> father(n * m, 0);
         for (int i = 0; i < grid.size(); ++i) {
             for (int j = 0; j < grid[0].size(); ++j) {
-                father[i * m + j] = (grid[i][j] == 1) ? i * m + j : -1;
+                father[i * m + j] = (grid[i][j] == 1) ? (i * m + j) : -1;
             }
         }
         for (int i = 1; i < grid.size(); ++i) {
@@ -34,7 +34,7 @@ class Solution {
             if ((i + 1) % m != 0)
                 cout << father[i] << "  ";
             else
-                cout << endl;
+                cout << father[i] << endl;
         }
         cout << endl;
         for (int i = 1; i < grid.size(); ++i) {
@@ -51,17 +51,21 @@ class Solution {
             if ((i + 1) % m != 0)
                 cout << father[i] << "  ";
             else
-                cout << endl;
+                cout << father[i] << endl;
         }
-        int ret{0};
+        int maxval{0};
+        map<int, int> mp;
         for (int i = 0; i < father.size(); ++i) {
-            if (father[i] == i) {
-                ret += 1;
+            if (father[i] != -1) {
+                int root = find(father, i);
+                mp[root] += 1;
+                maxval = max(maxval, mp[root]);
             }
         }
-        return ret;
+        return maxval;
     }
     void merge(vector<int>& father, int i, int j) {
+        //过程中的merge 不保证其所有的根都为fi
         int fi = find(father, i);
         while (father[j] != fi) {
             int tmp = father[j];
@@ -89,6 +93,7 @@ int main() {
     //                          {0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0}, {0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0},
     //                          {0, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0},
     //                          {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0}};//6
+    // vector<vector<int>> grid{{1, 1, 0, 0, 0}, {1, 1, 0, 0, 0}, {0, 0, 0, 1, 1}, {0, 0, 0, 1, 1}};  // 4
     vector<vector<int>> grid{{1, 1, 0, 0, 0}, {1, 1, 0, 0, 0}, {0, 0, 0, 1, 1}, {0, 0, 0, 1, 1}};  // 4
     cout << A.maxAreaOfIsland(grid) << endl;
     return 0;
