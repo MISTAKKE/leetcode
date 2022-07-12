@@ -14,17 +14,20 @@ class Solution {
     // 23:32
     int largestIsland(vector<vector<int>>& grid) {
         int n = grid.size();
-        vector<int> father(n * n, 0);
+        vector<int> father(n * n, -1);
         set<int> able;
         // init
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n; ++j) {
                 if (grid[i][j] == 1) {
-                    for (int dx = -1; dx <= 1; dx += 2) {
-                        for (int dy = -1; dy <= 1; dy += 2) {
-                            if (isok(n, i + di, j + dy)) {
-                                if (grid[i + di][j + dy]) {
-                                    merge(father, i + di, j + dy);
+                    for (int di = -1; di <= 1; di += 2) {
+                        for (int dj = -1; dj <= 1; dj += 2) {
+                            if (isok(n, i + di, j + dj)) {
+                                if (grid[i + di][j + dj] == 0) {
+                                    able.insert((i + di) * n + j + dj);
+                                }
+                                else {
+                                    merge(father, i * n + j, (i + di) * n + j + dj);
                                 }
                             }
                         }
@@ -32,12 +35,33 @@ class Solution {
                 }
             }
         }
-        // merge now
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n; ++j) {
-                ;
-            }
+        return 0;
+        map<int, int> fatherval;
+        for (int i = 0; i < n * n; ++i) {
+            fatherval[find(father, i)] += 1;
         }
+        show(father);
+        show(fatherval);
+        // merge now
+        int maxval = 1;
+        for (auto it : able) {
+            int i = it / n;
+            int j = it % n;
+            set<int> total;
+            int totalval = 0;
+            for (int di = -1; di <= 1; di += 2) {
+                for (int dj = -1; dj <= 1; dj += 2) {
+                    if (isok(n, i + di, j + dj)) {
+                        total.insert(find(father, (i + di) * n + j + dj));
+                    }
+                }
+            }
+            for (auto it : total) {
+                totalval += fatherval[it];
+            }
+            maxval = max(maxval, totalval);
+        }
+        return maxval + 1;
     }
     bool isok(int n, int i, int j) {
         if (i < 0 || j < 0 || i >= n || j >= n)
@@ -68,6 +92,8 @@ class Solution {
 
 int main() {
     Solution A;
+    vector<vector<int>> grid{{0, 1}, {1, 0}};
+    cout << A.largestIsland(grid) << endl;
 
     return 0;
 }
