@@ -14,7 +14,45 @@ grid[i][j] == 0 or 1
 
 class Solution {
   public:
-    int countServers(vector<vector<int>>& grid) {}
+    int countServers(vector<vector<int>>& grid) {
+        int ret = 0;
+        vector<int> father(grid.size() * grid.size(), -1);
+        for (int i = 0; i < grid.size(); ++i) {
+            for (int j = 0; j < grid.size(); ++j) {
+                if (grid[i][j] == 1) {
+                    father[i * grid.size() + j] = i * grid.size() + j;
+                    ret += 1;
+                }
+            }
+        }
+        for (int i = 0; i < grid.size(); ++i) {
+            for (int j = 0; j < grid.size(); ++j) {
+                if (grid[i][j] == 1) {
+                    for (int k = 0; k < grid.size(); ++k) {
+                        if (k != j && grid[i][k] == 1) {
+                            merge(father, i * grid.size() + j, i * grid.size() + k);
+                        }
+                        if (k != i && grid[k][j] == 1) {
+                            merge(father, i * grid.size() + j, k * grid.size() + j);
+                        }
+                    }
+                }
+            }
+        }
+        map<int, int> fathercnt;
+        for (int i = 0; i < grid.size(); ++i) {
+            for (int j = 0; j < grid.size(); ++j) {
+                fathercnt[find(father, i * grid.size() + j)] += 1;
+            }
+        }
+        return ret;
+        for (auto& it : fathercnt) {
+            if (it.second == 1) {
+                ret -= 1;
+            }
+        }
+        return ret;
+    }
 
     int find(vector<int>& father, int i) {
         int son = father[i];
@@ -38,6 +76,8 @@ class Solution {
 
 int main() {
     Solution A;
+    vector<vector<int>> res{{0, 1}, {1, 0}};
+    cout << A.countServers(res) << endl;
 
     return 0;
 }
