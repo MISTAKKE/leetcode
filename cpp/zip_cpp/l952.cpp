@@ -13,54 +13,46 @@ nums 中所有值都 不同
 class Solution {
   public:
     int largestComponentSize(vector<int>& nums) {
-        vector<int> father(100000, -1);
+        map<int, int> father;
         map<int, int> fathercnt;
         int maxcnt{0};
-        map<int, set<int>> record;
-        record[1] = set<int>{};
-        vector<set<int>> primedata(100000, set<int>{});
+        map<int, set<int>> primedata;
         for (auto& c : nums) {
-            auto ret = getprime(record, c);
-            // show(ret);
-            for (auto val : ret) {
-                // cout << "val:" << val << " c:" << c << endl;
-                primedata[val].insert(c);
-            }
+            getprime(primedata, c);
         }
         for (auto& it : primedata) {
-            for (auto& c : it) {
-                for (auto& d : it) {
-                    if (c != d && find(father, c) != find(father, d))
-                        merge(father, c, d);
-                }
+            auto c = it.first;
+            if (c == 1) {
+                continue;
+            }
+            for (auto& d : it.second) {
+                if (find(father, c) != find(father, d))
+                    merge(father, c, d);
             }
         }
+
         for (int i = 0; i < nums.size(); ++i) {
-            fathercnt[find(father, nums[i])] += 1;
-            maxcnt = max(maxcnt, fathercnt[find(father, nums[i])]);
+            int d = find(father, nums[i]);
+            fathercnt[d] += 1;
+            maxcnt = max(maxcnt, fathercnt[d]);
         }
         return maxcnt;
     }
-    set<int> getprime(map<int, set<int>>& record, int n) {
-        // cout << "getprime n:" << n << endl;
-        if (record.find(n) != record.end()) {
-            // cout << "find1 show record[n]:" << endl;
-            // show(record[n]);
-            return record[n];
-        }
+    void getprime(map<int, set<int>>& primedata, int n) {
+        int original = n;
         for (int i = 2; i * i <= n; ++i) {
             if (n % i == 0) {
                 n = n / i;
-                set<int> res = getprime(record, n);
-                res.insert(i);
-                return res;
+                while (n % i == 0) {
+                    n = n / i;
+                }
+                primedata[i].insert(original);
             }
         }
-        record[n] = set<int>{n};
-        return record[n];
+        primedata[n].insert(original);
     }
-    int find(vector<int>& father, int i) {
-        if (father[i] == -1) {
+    int find(map<int, int>& father, int i) {
+        if (father.end() == father.find(i)) {
             father[i] = i;
             return i;
         }
@@ -75,7 +67,7 @@ class Solution {
         }
         return i;
     }
-    void merge(vector<int>& father, int i, int j) {
+    void merge(map<int, int>& father, int i, int j) {
         father[find(father, i)] = find(father, j);
     }
 };
