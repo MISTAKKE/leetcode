@@ -56,6 +56,11 @@ void print(const Type &arg, const Types &...args) {
     print(args...);
 }
 
+template <typename Type>
+void show(const Type &arg) {
+    std::cout << "输出单个值:" << arg << endl;
+}
+
 void show(ListNode *t) {
     cout << "List: ";
     ListNode *p = t;
