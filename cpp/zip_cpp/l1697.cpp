@@ -28,34 +28,39 @@ class Solution {
         iota(queriesrank.begin(), queriesrank.end(), 0);
         sort(queriesrank.begin(), queriesrank.end(), [&](int i, int j) { return queries[i][2] < queries[j][2]; });
         sort(edgeList.begin(), edgeList.end(), [](vector<int> e1, vector<int> e2) { return e1[2] < e2[2]; });
-        map<int, int> father;
-        map<int, int> rank;
+        vector<int> father(n);
+        iota(father.begin(), father.end(), 0);
+        vector<int> rank(n, 1);
         int edge_id = 0;
         vector<bool> ans(queries.size());
         for (int query_id : queriesrank) {
             int& nowweight = queries[query_id][2];
             while (edge_id < edgeList.size() && nowweight > edgeList[edge_id][2]) {
-                merge(father, edgeList[edge_id][0], edgeList[edge_id][1]);
+                merge(father, rank, edgeList[edge_id][0], edgeList[edge_id][1]);
                 ++edge_id;
             }
             // check connected
             ans[query_id] = find(father, queries[query_id][0]) == find(father, queries[query_id][1]);
         }
-        show(father);
+        // show(father);
+        // show(rank);
         return ans;
     }
-    void merge(map<int, int>& father, map<int, int>& rank, int i, int j) {
-        i = find(father, rank, i);
-        j = find(father, rank, j);
-        if (rank[i] < rank[j]) {}
-        father[find(father, i)] = father[find(father, j)];
-    }
-    int find(map<int, int>& father, map<int, int>& rank, int i) {
-        if (father.find(i) == father.end()) {
-            father[i] = i;
-            rank[i] = 0;  // 0 为根节点
-            return i;
+    void merge(vector<int>& father, vector<int>& rank, int i, int j) {
+        i = find(father, i);
+        j = find(father, j);
+        if (i == j) {
+            return;
         }
+        // cout << "i:" << i << " j:" << j << " rank[i]" << rank[i] << " rank[j]" << rank[j] << endl;
+        if (rank[i] < rank[j]) {
+            swap(i, j);
+        }
+
+        father[j] = i;
+        rank[i] += rank[j];
+    }
+    int find(vector<int>& father, int i) {
         int old = i;
         while (i != father[i]) {
             i = father[i];
@@ -63,7 +68,6 @@ class Solution {
         while (old != i) {
             int tmp = father[old];
             father[old] = i;
-            rank[old] = rank[i] + 1;
             old = tmp;
         }
         return i;
@@ -76,6 +80,6 @@ int main() {
     // vector<vector<int>> queries{{0, 1, 2}, {0, 2, 5}}; // 1 0
     vector<vector<int>> edgeList{{0, 1, 10}, {1, 2, 5}, {2, 3, 9}, {3, 4, 13}};
     vector<vector<int>> queries{{0, 4, 14}, {1, 4, 13}};
-    show(A.distanceLimitedPathsExist(0, edgeList, queries));
+    show(A.distanceLimitedPathsExist(5, edgeList, queries));
     return 0;
 }
