@@ -29,20 +29,30 @@ class Solution {
             t = t->left;
             ++h;
         }
-        int left = 0;
-        int right = 0;
+        int left = 1;  //
+        int right = pow(2, h - 1) - 1;
         while (left <= right) {
             int mid = (left + right) / 2;
             if (exist(root, h, mid)) {
-                left = mid;
+                left = mid + 1;
             }
             else {
                 right = mid;
             }
         }
-        return left;
+        return left - 1;
     }
-    bool exist(TreeNode* root, int h, int val) {}
+    bool exist(TreeNode* root, int h, int val) {
+        while (--h != 0) {
+            if (val & (1 << (h - 1)) == 0) {
+                root = root->left;
+            }
+            else {
+                root = root->right;
+            }
+        }
+        return root != nullptr;
+    }
 };
 
 int main() {
