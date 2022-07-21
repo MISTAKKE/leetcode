@@ -61,16 +61,7 @@ class Solution {
         rank[i] += rank[j];
     }
     int find(vector<int>& father, int i) {
-        int old = i;
-        while (i != father[i]) {
-            i = father[i];
-        }
-        while (old != i) {
-            int tmp = father[old];
-            father[old] = i;
-            old = tmp;
-        }
-        return i;
+        return i == father[i] ? i : father[i] = find(father, father[i]);
     }
 };
 
