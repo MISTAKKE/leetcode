@@ -2,22 +2,20 @@
 using namespace std;
 
 class Solution {
-public:
+  public:
     bool isSubsequence(string s, string t) {
         int cnt = 0;
-        for(int i = 0; i<t.size(); ++i)
-        {
-            if(s[cnt] == t[i])
+        for (int i = 0; i < t.size(); ++i) {
+            if (s[cnt] == t[i])
                 cnt++;
-            if(cnt==s.size())
+            if (cnt == s.size())
                 return true;
         }
         return false;
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
     string s = "asd";
     string t = "sfdsaweresrwe";

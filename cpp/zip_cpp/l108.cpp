@@ -7,24 +7,20 @@ description:
 
 */
 
-class Solution2 //no recursion
+class Solution2  // no recursion
 {
-public:
-    vector<vector<int>> levelOrderBottom(TreeNode *root)
-    {
+  public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
         vector<vector<int>> res;
-        queue<TreeNode *> q;
-        if (root != NULL)
-        {
+        queue<TreeNode*> q;
+        if (root != NULL) {
             q.push(root);
         }
-        while (!q.empty())
-        {
+        while (!q.empty()) {
             int cnt = q.size();
             res.push_back(vector<int>());
-            while (cnt-- > 0)
-            {
-                TreeNode *t = q.front();
+            while (cnt-- > 0) {
+                TreeNode* t = q.front();
                 q.pop();
                 res.back().push_back(t->val);
                 if (t->left != NULL)
@@ -38,26 +34,22 @@ public:
         return res;
     }
 };
-//Class Solution
-class Solution1
-{
-public:
-    TreeNode *sortedArrayToBST(vector<int> &nums, int left = 0, int right = __INT_MAX__, bool isleft = false)
-    {
+// Class Solution
+class Solution1 {
+  public:
+    TreeNode* sortedArrayToBST(vector<int>& nums, int left = 0, int right = __INT_MAX__, bool isleft = false) {
         if (nums.size() == 0 || left > right)
             return NULL;
         if (right == __INT_MAX__)
             right = nums.size() - 1;
         int mid = (left + right) / 2;
-        TreeNode *root = new TreeNode(nums[mid]);
-        if (right - left == 1 && isleft)
-        {
-            TreeNode *newroot = new TreeNode(nums[right]);
+        TreeNode* root = new TreeNode(nums[mid]);
+        if (right - left == 1 && isleft) {
+            TreeNode* newroot = new TreeNode(nums[right]);
             newroot->left = root;
             return newroot;
         }
-        else
-        {
+        else {
             root->left = sortedArrayToBST(nums, left, mid - 1, true);
             root->right = sortedArrayToBST(nums, mid + 1, right, false);
         }
@@ -66,42 +58,37 @@ public:
         return root;
     }
 };
-class Solution
-{
-public:
-    TreeNode *sortedArrayToBST(vector<int> &nums)
-    {
+class Solution {
+  public:
+    TreeNode* sortedArrayToBST(vector<int>& nums) {
         if (nums.size() == 0)
             return NULL;
         return helper(nums, 0, nums.size() - 1, false);
     }
-    TreeNode * helper(vector<int> &nums, int left, int right, bool isleft)
-    {
-        if(left>right) return NULL;
+    TreeNode* helper(vector<int>& nums, int left, int right, bool isleft) {
+        if (left > right)
+            return NULL;
         int mid = (left + right) / 2;
-        TreeNode *root = new TreeNode(nums[mid]);
-        cout<<"left:"<<left<<" mid:"<<mid<<" right:"<<right<<endl;
-        if (right - left == 1 && isleft)
-        {
-            TreeNode *newroot = new TreeNode(nums[right]);
+        TreeNode* root = new TreeNode(nums[mid]);
+        cout << "left:" << left << " mid:" << mid << " right:" << right << endl;
+        if (right - left == 1 && isleft) {
+            TreeNode* newroot = new TreeNode(nums[right]);
             newroot->left = root;
             return newroot;
         }
-        else
-        {
+        else {
             root->left = helper(nums, left, mid - 1, true);
             root->right = helper(nums, mid + 1, right, false);
         }
         return root;
     }
 };
-int main()
-{
+int main() {
     Solution A;
     Solution2 B;
     vector<int> res{1, 2, 3};
     show(res);
-    TreeNode *root = A.sortedArrayToBST(res);
+    TreeNode* root = A.sortedArrayToBST(res);
     show(B.levelOrderBottom(root));
     return 0;
 }

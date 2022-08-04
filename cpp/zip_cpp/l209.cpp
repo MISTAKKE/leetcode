@@ -7,20 +7,16 @@ description:
 
 */
 
-//Class Solution
-class Solution
-{
-public:
-    int minSubArrayLen(int target, vector<int> &nums)
-    {
+// Class Solution
+class Solution {
+  public:
+    int minSubArrayLen(int target, vector<int>& nums) {
         int maxval = 0;
         int end = 0;
         int minlen = 0x7fffffff;
-        for (int i = 0; i < nums.size(); ++i)
-        {
+        for (int i = 0; i < nums.size(); ++i) {
             maxval += nums[i];
-            while (maxval >= target)
-            {
+            while (maxval >= target) {
                 minlen = min(minlen, i - end + 1);
                 maxval -= nums[end];
                 end++;
@@ -32,10 +28,9 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
-    vector<int> vec{1,1,1,1,1,1,1,1};
+    vector<int> vec{1, 1, 1, 1, 1, 1, 1, 1};
     cout << A.minSubArrayLen(11, vec) << endl;
 
     return 0;

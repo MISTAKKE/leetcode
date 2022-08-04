@@ -1,17 +1,15 @@
-#include <iostream>
 #include <algorithm>
-#include <vector>
+#include <iostream>
 #include <set>
+#include <vector>
 using namespace std;
 
-int main()
-{
+int main() {
     int n, a, b, c;
-    cin >> n;//n组case
-    vector<vector<int>> vec;//每一组case的数组  每一组有3个数
-    vector<int> res;//结果
-    for (int i = 0; i < n; ++i)
-    {
+    cin >> n;                 // n组case
+    vector<vector<int>> vec;  //每一组case的数组  每一组有3个数
+    vector<int> res;          //结果
+    for (int i = 0; i < n; ++i) {
         vector<int> vec2;
         cin >> a;
         cin >> b;
@@ -22,8 +20,7 @@ int main()
         vec.push_back(vec2);
     }
 
-    for (int i = 0; i < n; ++i)
-    {
+    for (int i = 0; i < n; ++i) {
         unsigned long before_a1 = 1;
         unsigned long before_b1 = 0;
 
@@ -38,18 +35,16 @@ int main()
         vector<bool> vecbool(1000000, false);
         int maxnow = 0;
         int now = 0;
-        while(x!=0)
-        {
-            if(x%2!=0)
+        while (x != 0) {
+            if (x % 2 != 0)
                 vecbool[now] = true;
-            if(now > maxnow)
+            if (now > maxnow)
                 maxnow = now;
-            now +=1;
-            x = x/2;
+            now += 1;
+            x = x / 2;
         }
 
-        while(cnt--)
-        {
+        while (cnt--) {
             int temp_a = last_a1 + before_a1;
             int temp_b = last_b1 + before_b1;
 
@@ -58,31 +53,28 @@ int main()
 
             last_a1 = temp_a;
             last_b1 = temp_b;
-            
+
             unsigned long y = A * temp_a + B * temp_b;
             // cout<<"y:"<<y<<endl;
             now = 0;
-            while(y!=0)
-            {
-                if(y%2!=0 && !vecbool[now])
+            while (y != 0) {
+                if (y % 2 != 0 && !vecbool[now])
                     vecbool[now] = true;
-                if(now > maxnow)
+                if (now > maxnow)
                     maxnow = now;
-                now +=1;
-                y = y/2;
+                now += 1;
+                y = y / 2;
             }
         }
 
         int zero = 0;
-        for(int ii = 0; ii<=maxnow; ++ii)
-        {
-            if(!vecbool[ii])
+        for (int ii = 0; ii <= maxnow; ++ii) {
+            if (!vecbool[ii])
                 zero += 1;
         }
         res.push_back(zero);
     }
-    for (unsigned int i = 0; i < res.size(); ++i)
-    {
+    for (unsigned int i = 0; i < res.size(); ++i) {
         cout << res[i];
         if (i != res.size() - 1)
             cout << endl;
@@ -90,4 +82,3 @@ int main()
 
     return 0;
 }
-

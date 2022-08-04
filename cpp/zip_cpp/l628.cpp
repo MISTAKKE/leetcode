@@ -7,15 +7,9 @@ description:
 
 */
 
-//Class Solution
+// Class Solution
 
-
-
-
-
-
-int main()
-{
+int main() {
     Solution A;
 
     return 0;

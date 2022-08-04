@@ -7,25 +7,19 @@ description:
 
 */
 
-//Class Solution
-class Solution
-{
-public:
-    string reverseWords(string s)
-    {
+// Class Solution
+class Solution {
+  public:
+    string reverseWords(string s) {
         reverse(s.begin(), s.end());
         string tmp = "";
         string res = "";
-        for (int i = 0; i < s.size(); ++i)
-        {
-            if (s[i] != ' ')
-            {
+        for (int i = 0; i < s.size(); ++i) {
+            if (s[i] != ' ') {
                 tmp += s[i];
             }
-            else
-            {
-                if (!tmp.empty())
-                {
+            else {
+                if (!tmp.empty()) {
                     reverse(tmp.begin(), tmp.end());
                     if (!res.empty())
                         res += " ";
@@ -34,8 +28,7 @@ public:
                 }
             }
         }
-        if (!tmp.empty())
-        {
+        if (!tmp.empty()) {
             reverse(tmp.begin(), tmp.end());
             if (!res.empty())
                 res += " ";
@@ -45,8 +38,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
     string str = "  abc edf ghijk  lom    ";
     cout << A.reverseWords(str) << endl;

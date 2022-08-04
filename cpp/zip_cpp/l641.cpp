@@ -19,17 +19,15 @@ isFull()：检查双端队列是否满了。
 请不要使用内置的双端队列库。
 */
 
-//Class Solution
-class MyCircularDeque
-{
-public:
+// Class Solution
+class MyCircularDeque {
+  public:
     vector<int> data;
     int cap;
     int start;
     int end;
     /** Initialize your data structure here. Set the size of the deque to be k. */
-    MyCircularDeque(int k)
-    {
+    MyCircularDeque(int k) {
         cap = k + 1;
         start = 0;
         end = 0;
@@ -37,8 +35,7 @@ public:
     }
 
     /** Adds an item at the front of Deque. Return true if the operation is successful. */
-    bool insertFront(int value)
-    {
+    bool insertFront(int value) {
         if (isFull())
             return false;
         end = (end + 1) % cap;
@@ -47,8 +44,7 @@ public:
     }
 
     /** Adds an item at the rear of Deque. Return true if the operation is successful. */
-    bool insertLast(int value)
-    {
+    bool insertLast(int value) {
         if (isFull())
             return false;
         data[start] = value;
@@ -57,8 +53,7 @@ public:
     }
 
     /** Deletes an item from the front of Deque. Return true if the operation is successful. */
-    bool deleteFront()
-    {
+    bool deleteFront() {
         if (isEmpty())
             return false;
         end = (end - 1 + cap) % cap;
@@ -66,8 +61,7 @@ public:
     }
 
     /** Deletes an item from the rear of Deque. Return true if the operation is successful. */
-    bool deleteLast()
-    {
+    bool deleteLast() {
         if (isEmpty())
             return false;
         start = (start + 1) % cap;
@@ -75,55 +69,51 @@ public:
     }
 
     /** Get the front item from the deque. */
-    int getFront()
-    {
+    int getFront() {
         if (isEmpty())
             return -1;
         return data[end];
     }
 
     /** Get the last item from the deque. */
-    int getRear()
-    {
+    int getRear() {
         if (isEmpty())
             return -1;
         return data[(start + 1) % cap];
     }
 
     /** Checks whether the circular deque is empty or not. */
-    bool isEmpty()
-    {
+    bool isEmpty() {
         if (start == end)
             return true;
         return false;
     }
 
     /** Checks whether the circular deque is full or not. */
-    bool isFull()
-    {
+    bool isFull() {
         if ((end + cap - start) % cap == cap - 1)
             return true;
         return false;
     }
 };
 
-int main()
-{
-    MyCircularDeque circularDeque(3);             // 设置容量大小为3
-    cout << circularDeque.insertLast(1) << endl;  // 返回 true
-    cout << circularDeque.insertLast(2) << endl;  // 返回 true
-    cout << circularDeque.insertFront(3) << endl; // 返回 true
-    cout << circularDeque.insertFront(4) << endl; // 已经满了，返回 false
-    cout << circularDeque.getRear() << endl;      // 返回 2
-    cout << circularDeque.isFull() << endl;       // 返回 true
-    cout << circularDeque.deleteLast() << endl;   // 返回 true
-    cout << circularDeque.insertFront(4) << endl; // 返回 true
-    cout << circularDeque.getFront() << endl;     // 返回 4
+int main() {
+    MyCircularDeque circularDeque(3);              // 设置容量大小为3
+    cout << circularDeque.insertLast(1) << endl;   // 返回 true
+    cout << circularDeque.insertLast(2) << endl;   // 返回 true
+    cout << circularDeque.insertFront(3) << endl;  // 返回 true
+    cout << circularDeque.insertFront(4) << endl;  // 已经满了，返回 false
+    cout << circularDeque.getRear() << endl;       // 返回 2
+    cout << circularDeque.isFull() << endl;        // 返回 true
+    cout << circularDeque.deleteLast() << endl;    // 返回 true
+    cout << circularDeque.insertFront(4) << endl;  // 返回 true
+    cout << circularDeque.getFront() << endl;      // 返回 4
 
     return 0;
 }
 
-// [ "MyCircularDeque", "insertFront", "insertLast", "getFront", "insertLast", "getFront", "insertFront", "getRear", "getFront", "getFront", "deleteLast", "getRear" ]
+// [ "MyCircularDeque", "insertFront", "insertLast", "getFront", "insertLast", "getFront", "insertFront", "getRear",
+// "getFront", "getFront", "deleteLast", "getRear" ]
 //     [[5], [7], [0], [], [3], [], [9], [], [], [], [], []]
 
 //     [null, true, true, 0, true, 0, true, 3, 9, 9, true, 0] 预期结果：

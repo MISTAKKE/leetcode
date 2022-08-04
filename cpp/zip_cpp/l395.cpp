@@ -7,23 +7,19 @@ description:
 
 */
 
-//Class Solution
-class Solution
-{
-public:
+// Class Solution
+class Solution {
+  public:
     int gap;
     string str;
-    int longestSubstring(string s, int k)
-    {
+    int longestSubstring(string s, int k) {
         gap = k;
         str = s;
         return helper(0, s.size());
     }
-    int helper(int start, int end)
-    {
+    int helper(int start, int end) {
         vector<int> vec(26, 0);
-        for (int i = start; i < end; ++i)
-        {
+        for (int i = start; i < end; ++i) {
             vec[str[i] - 'a']++;
         }
         int idx = start;
@@ -40,11 +36,9 @@ public:
     }
 };
 
-class Solution2
-{
-public:
-    int longestSubstring(string s, int k)
-    {
+class Solution2 {
+  public:
+    int longestSubstring(string s, int k) {
         if (k <= 1)
             return s.size();
         if (s.empty() || s.size() < k)
@@ -69,8 +63,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
     string str = "ababbc";
     cout << A.longestSubstring(str, 2) << endl;

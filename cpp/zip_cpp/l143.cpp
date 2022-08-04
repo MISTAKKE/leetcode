@@ -7,7 +7,7 @@ description:
 
 */
 
-//Class Solution
+// Class Solution
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -18,11 +18,9 @@ description:
  *     ListNode(int x, ListNode *next) : val(x), next(next) {}
  * };
  */
-class Solution
-{
-public:
-    void reorderList(ListNode *head)
-    {
+class Solution {
+  public:
+    void reorderList(ListNode* head) {
         //偶数节点：
         // 1 2 [3] 4 [5] 6
         // 1 6 2 5 3 4
@@ -32,33 +30,31 @@ public:
         // 1 7 2 6 3 5 4
         // 1 2 3 4  +  7 6 5
         //步骤：
-        //1 快慢表找中点
-        //2 将后面的reverse
-        //3 将两者交替插入，返回
+        // 1 快慢表找中点
+        // 2 将后面的reverse
+        // 3 将两者交替插入，返回
         if (head == NULL || head->next == NULL)
             return;
-        ListNode *fast = head;
-        ListNode *slow = head;
-        while (fast->next != NULL && fast->next->next != NULL)
-        {
+        ListNode* fast = head;
+        ListNode* slow = head;
+        while (fast->next != NULL && fast->next->next != NULL) {
             fast = fast->next->next;
             slow = slow->next;
-        }                         //slow为快表最后一个
-        ListNode *p = slow->next; //p为后半部分第一个
+        }                          // slow为快表最后一个
+        ListNode* p = slow->next;  // p为后半部分第一个
         slow->next = NULL;
-        ListNode *h = new ListNode(0); //   h -> p -> p1 -> p2 -> p3 -> NULL
+        ListNode* h = new ListNode(0);  //   h -> p -> p1 -> p2 -> p3 -> NULL
         h->next = p;
-        while (p->next != NULL) //2. reverse 后半部分
+        while (p->next != NULL)  // 2. reverse 后半部分
         {
-            ListNode *tmp = p->next;
+            ListNode* tmp = p->next;
             p->next = p->next->next;
             tmp->next = h->next;
             h->next = tmp;
         }
-        //3. merge head and  h->next(p);
-        ListNode *q = head;
-        while (h->next != NULL)
-        {
+        // 3. merge head and  h->next(p);
+        ListNode* q = head;
+        while (h->next != NULL) {
             p = h->next;
             h->next = h->next->next;
             p->next = q->next;
@@ -69,8 +65,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
     ListNode l1(1);
     ListNode l2(2);

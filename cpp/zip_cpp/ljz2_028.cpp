@@ -3,7 +3,7 @@ using namespace std;
 
 // Definition for a Node.
 class Node {
-public:
+  public:
     int val;
     Node* prev;
     Node* next;
@@ -11,7 +11,7 @@ public:
 };
 
 class Solution {
-public:
+  public:
     Node* last;
     Node* flatten(Node* head) {
         last = head;
@@ -19,9 +19,9 @@ public:
         dfs(head->next);
         return head;
     }
-    void dfs(Node *head)
-    {
-        if(head == NULL) return head;
+    void dfs(Node* head) {
+        if (head == NULL)
+            return head;
         dfs(head->child);
         last->next = head;
         head->prev = last;
@@ -31,11 +31,7 @@ public:
     }
 };
 
-
-
-
-int main()
-{
+int main() {
     Solution A;
 
     return 0;

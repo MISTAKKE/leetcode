@@ -43,8 +43,7 @@ arr[k-1]有关系，所以维护上一次的运行结果记录即可
 // Class Solution
 class Solution {
   public:
-    int subarrayBitwiseORs(vector<int>& arr)
-    {
+    int subarrayBitwiseORs(vector<int>& arr) {
         std::set<int> ans;
         std::set<int> cur{0};
         for (auto& c : arr) {  // O(N)
@@ -60,9 +59,8 @@ class Solution {
     }
 };
 
-int main()
-{
-    Solution    A;
+int main() {
+    Solution A;
     vector<int> arr{1, 2, 4};
     cout << A.subarrayBitwiseORs(arr) << endl;
     return 0;

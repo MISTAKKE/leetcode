@@ -7,22 +7,19 @@ description:
 
 */
 
-//Class Solution
-class Solution
-{
-public:
+// Class Solution
+class Solution {
+  public:
     vector<vector<int>> res;
     int target;
-    vector<vector<int>> pathSum(TreeNode *root, int targetSum)
-    {
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
         target = targetSum;
         vector<int> tmp;
         dfs(root, tmp, 0);
         return res;
     }
 
-    void dfs(TreeNode *p, vector<int> &vec, int val)
-    {
+    void dfs(TreeNode* p, vector<int>& vec, int val) {
         vec.push_back(p->val);
         val += p->val;
         if (p->left == NULL && p->right == NULL && val == target)
@@ -36,8 +33,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
 
     return 0;

@@ -7,55 +7,46 @@ description:
 
 */
 
-//Class Solution
-class Solution1 //recursion
+// Class Solution
+class Solution1  // recursion
 {
-public:
+  public:
     vector<vector<int>> res;
-    vector<vector<int>> levelOrderBottom(TreeNode *root)
-    {
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
         if (root != NULL)
             dfs(root, 0);
         reverse(res.begin(), res.end());
         return res;
     }
-    void dfs(TreeNode *root, int level)
-    {
-        if (res.size() == level)
-        {
+    void dfs(TreeNode* root, int level) {
+        if (res.size() == level) {
             res.push_back(vector<int>());
         }
         res[level].push_back(root->val);
-        if (root->left != NULL)
-        {
+        if (root->left != NULL) {
             dfs(root->left, level + 1);
         }
-        if (root->right != NULL)
-        {
+        if (root->right != NULL) {
             dfs(root->right, level + 1);
         }
     }
 };
 
-//Class Solution
-class Solution //no recursion
+// Class Solution
+class Solution  // no recursion
 {
-public:
-    vector<vector<int>> levelOrderBottom(TreeNode *root)
-    {
+  public:
+    vector<vector<int>> levelOrderBottom(TreeNode* root) {
         vector<vector<int>> res;
-        queue<TreeNode *> q;
-        if (root != NULL)
-        {
+        queue<TreeNode*> q;
+        if (root != NULL) {
             q.push(root);
         }
-        while (!q.empty())
-        {
+        while (!q.empty()) {
             int cnt = q.size();
             res.push_back(vector<int>());
-            while (cnt-- > 0)
-            {
-                TreeNode *t = q.front();
+            while (cnt-- > 0) {
+                TreeNode* t = q.front();
                 q.pop();
                 res.back().push_back(t->val);
                 if (t->left != NULL)
@@ -69,8 +60,7 @@ public:
         return res;
     }
 };
-int main()
-{
+int main() {
     Solution A;
 
     TreeNode l(2, NULL, NULL);

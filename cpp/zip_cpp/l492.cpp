@@ -2,20 +2,17 @@
 using namespace std;
 
 class Solution {
-public:
+  public:
     vector<int> constructRectangle1(int area) {
         int w = 1;
         int l = area;
         int tmp = w;
-        while(tmp<l)
-        {
-            tmp ++;
-            if(area % tmp == 0)
-            {
+        while (tmp < l) {
+            tmp++;
+            if (area % tmp == 0) {
                 l = area / tmp;
                 w = tmp;
-                if(l<w)
-                {
+                if (l < w) {
                     tmp = l;
                     l = w;
                     w = tmp;
@@ -26,19 +23,16 @@ public:
         return vector<int>{l, w};
     }
 
-    vector<int> constructRectangle(int area)
-    {
+    vector<int> constructRectangle(int area) {
         int h = sqrt(area);
-        while(area % h !=0)
+        while (area % h != 0)
             h--;
-        return vector<int>{area/h, h};
+        return vector<int>{area / h, h};
     }
-
 };
 
-int main()
-{
-    Solution A;    
+int main() {
+    Solution A;
     show(A.constructRectangle1(4000));
 
     return 0;

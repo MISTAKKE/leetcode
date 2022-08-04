@@ -14,34 +14,29 @@ using namespace std;
 */
 
 class Solution {
-public:
+  public:
     int maxdepth;
     int longestZigZag(TreeNode* root) {
         maxdepth = 0;
-        if(root->left!=NULL)
-        {
+        if (root->left != NULL) {
             get(root->left, true, 0);
         }
-        if(root->right!=NULL)
-        {
+        if (root->right != NULL) {
             get(root->right, false, 0);
         }
         return maxdepth;
     }
-    void get(TreeNode* root, bool direction, int depth)
-    {
+    void get(TreeNode* root, bool direction, int depth) {
         maxdepth = depth + 1 > maxdepth ? depth + 1 : maxdepth;
-        if(root->left !=NULL)
-        {
-            if(direction)
+        if (root->left != NULL) {
+            if (direction)
                 get(root->left, direction, 0);
             else
                 get(root->left, !direction, depth + 1);
         }
 
-        if(root->right !=NULL)
-        {
-            if(direction)
+        if (root->right != NULL) {
+            if (direction)
                 get(root->right, !direction, depth + 1);
             else
                 get(root->right, direction, 0);
@@ -49,9 +44,7 @@ public:
     }
 };
 
-
-int main()
-{
+int main() {
     Solution A;
 
     return 0;

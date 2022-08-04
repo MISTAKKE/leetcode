@@ -7,45 +7,36 @@ description:
 
 */
 
-//Class Solution
+// Class Solution
 
-class Solution
-{
-public:
-    ListNode *addTwoNumbers(ListNode *l1, ListNode *l2)
-    {
-        ListNode *head = NULL;
-        ListNode *last = NULL;
-        ListNode *now = NULL;
-        ListNode *freelist = NULL;
+class Solution {
+  public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* head = NULL;
+        ListNode* last = NULL;
+        ListNode* now = NULL;
+        ListNode* freelist = NULL;
         int left = 0;
-        while (l1 != NULL || l2 != NULL)
-        {
+        while (l1 != NULL || l2 != NULL) {
             now = NULL;
             int val = left;
-            if (l1 != NULL)
-            {
+            if (l1 != NULL) {
                 val += l1->val;
-                if (head == NULL)
-                {
+                if (head == NULL) {
                     head = l1;
                     now = l1;
                 }
-                else
-                {
+                else {
                     now = l1;
                 }
                 l1 = l1->next;
             }
-            if (l2 != NULL)
-            {
+            if (l2 != NULL) {
                 val += l2->val;
-                if (now == NULL)
-                {
+                if (now == NULL) {
                     now = l2;
                 }
-                else if (freelist == NULL)
-                {
+                else if (freelist == NULL) {
                     freelist = l2;
                 }
                 l2 = l2->next;
@@ -53,18 +44,15 @@ public:
             left = val / 10;
             val = val % 10;
             now->val = val;
-            if(last==NULL)
-            {
+            if (last == NULL) {
                 last = now;
             }
-            else
-            {
+            else {
                 last->next = now;
                 last = last->next;
             }
         }
-        if (left != 0)
-        {
+        if (left != 0) {
             freelist->val = left;
             freelist->next = NULL;
             last->next = freelist;
@@ -73,16 +61,14 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
     ListNode a(9);
     ListNode b(9);
     ListNode c(9);
     b.next = &c;
-    ListNode *p = A.addTwoNumbers(&a, &b);
-    while (p != NULL)
-    {
+    ListNode* p = A.addTwoNumbers(&a, &b);
+    while (p != NULL) {
         cout << p->val << " ";
         p = p->next;
     }

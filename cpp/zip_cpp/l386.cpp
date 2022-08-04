@@ -7,31 +7,28 @@ description:
 
 */
 
-//Class Solution
+// Class Solution
 
-class Solution
-{
-public:
+class Solution {
+  public:
     vector<int> ret;
     int maxval;
-    vector<int> lexicalOrder(int n)
-    {
+    vector<int> lexicalOrder(int n) {
         maxval = n;
-        for(int i =1;i<10;++i)
+        for (int i = 1; i < 10; ++i)
             dfs(i);
         return ret;
     }
-    void dfs(int n)
-    {
-        if(n>maxval) return;
+    void dfs(int n) {
+        if (n > maxval)
+            return;
         ret.push_back(n);
-        for(int i =0;i<10;++i)
-            dfs(n*10+i);
+        for (int i = 0; i < 10; ++i)
+            dfs(n * 10 + i);
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
     show(A.lexicalOrder(13));
 

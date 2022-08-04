@@ -10,27 +10,22 @@ insert、search 和 startsWith 调用次数 总计 不超过 3 * 104 次
 
 */
 
-//Class Solution
-class Trie
-{
-public:
-    vector<Trie *> vec;
+// Class Solution
+class Trie {
+  public:
+    vector<Trie*> vec;
     bool end;
     /** Initialize your data structure here. */
-    Trie()
-    {
+    Trie() {
         vec.resize(26, NULL);
         end = false;
     }
 
     /** Inserts a word into the trie. */
-    void insert(string word)
-    {
-        Trie *node = this;
-        for (auto &c : word)
-        {
-            if (node->vec[c - 'a'] == NULL)
-            {
+    void insert(string word) {
+        Trie* node = this;
+        for (auto& c : word) {
+            if (node->vec[c - 'a'] == NULL) {
                 node->vec[c - 'a'] = new Trie();
             }
             node = node->vec[c - 'a'];
@@ -39,13 +34,10 @@ public:
     }
 
     /** Returns if the word is in the trie. */
-    bool search(string word)
-    {
-        Trie *node = this;
-        for (auto &c : word)
-        {
-            if (node->vec[c - 'a'] == NULL)
-            {
+    bool search(string word) {
+        Trie* node = this;
+        for (auto& c : word) {
+            if (node->vec[c - 'a'] == NULL) {
                 return false;
             }
             node = node->vec[c - 'a'];
@@ -54,13 +46,10 @@ public:
     }
 
     /** Returns if there is any word in the trie that starts with the given prefix. */
-    bool startsWith(string prefix)
-    {
-        Trie *node = this;
-        for (auto &c : prefix)
-        {
-            if (node->vec[c - 'a'] == NULL)
-            {
+    bool startsWith(string prefix) {
+        Trie* node = this;
+        for (auto& c : prefix) {
+            if (node->vec[c - 'a'] == NULL) {
                 return false;
             }
             node = node->vec[c - 'a'];
@@ -77,8 +66,7 @@ public:
  * bool param_3 = obj->startsWith(prefix);
  */
 
-int main()
-{
+int main() {
     Trie* obj = new Trie();
     obj->insert("word");
     obj->insert("world");
@@ -86,7 +74,7 @@ int main()
     obj->insert("worldss");
     obj->insert("worad");
     obj->insert("worbd");
-    cout<<obj->search("worldss")<<endl;
-    cout<<obj->startsWith("worldss")<<endl;
+    cout << obj->search("worldss") << endl;
+    cout << obj->startsWith("worldss") << endl;
     return 0;
 }

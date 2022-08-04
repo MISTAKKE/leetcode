@@ -2,39 +2,35 @@
 using namespace std;
 
 class Solution {
-public:
+  public:
     bool isValid(string s) {
-        if(s.size()%2!=0) return false;
-        stack<char>st;
-        for(int i =0;i<s.size();++i)
-        {
+        if (s.size() % 2 != 0)
+            return false;
+        stack<char> st;
+        for (int i = 0; i < s.size(); ++i) {
             print("s[i]:", s[i]);
-            if(s[i] == '(' || s[i] == '[' || s[i] == '{')
-            {
+            if (s[i] == '(' || s[i] == '[' || s[i] == '{') {
                 st.push(s[i]);
             }
-            else
-            {
-                if(st.empty())
+            else {
+                if (st.empty())
                     return false;
                 char c = st.top();
                 st.pop();
-                if(c=='(' && s[i]==')' || c=='{' && s[i]=='}' || c=='[' && s[i] ==']')
-                {
+                if (c == '(' && s[i] == ')' || c == '{' && s[i] == '}' || c == '[' && s[i] == ']') {
                     continue;
                 }
                 return false;
             }
-        show(st);
+            show(st);
         }
         return true;
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
-    string str="()[]{}";
-    print(A.isValid(str));   
+    string str = "()[]{}";
+    print(A.isValid(str));
     return 0;
 }

@@ -11,7 +11,7 @@ description:
  2. 第m+1个数字进来时
     1/m+1 在 0
     1/m+1 在 1
-    1/m+1 在 m-1 
+    1/m+1 在 m-1
     1/m+1 不进来
 
  3. 第m+k个数字进来时  k = (1 ... M-m)
@@ -25,44 +25,36 @@ description:
 
 */
 
-//Class Solution
-class Solution
-{
-public:
+// Class Solution
+class Solution {
+  public:
     vector<int> nums2;
-    Solution(vector<int> &nums)
-    {
+    Solution(vector<int>& nums) {
         nums2.swap(nums);
     }
 
-    int pick(int target)
-    {
+    int pick(int target) {
         int ret = 0;
-        int cnt = 0; //target is hit cnt
-        for (int i = 0; i<nums2.size(); ++i)
-        {
-            if (nums2[i] == target)
-            {
+        int cnt = 0;  // target is hit cnt
+        for (int i = 0; i < nums2.size(); ++i) {
+            if (nums2[i] == target) {
                 cnt++;
-                if ((rand() % cnt) == 0)
-                {
+                if ((rand() % cnt) == 0) {
                     ret = i;
                 }
             }
         }
-        cout<<"cnt:"<<cnt<<endl;
+        cout << "cnt:" << cnt << endl;
 
         return ret;
     }
 };
 
-int main()
-{
+int main() {
     vector<int> vec{1, 2, 3, 3, 3, 3};
     Solution A(vec);
     vector<int> result(10, 0);
-    for (int i = 0; i < 10; ++i)
-    {
+    for (int i = 0; i < 10; ++i) {
         result[A.pick(3)]++;
     }
     show(result);

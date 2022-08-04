@@ -7,7 +7,7 @@ description:
 
 */
 
-//Class Solution
+// Class Solution
 /**
  * Definition for singly-linked list.
  * struct ListNode {
@@ -20,31 +20,27 @@ description:
 输入: 1->2->3->4->5->NULL, k = 2
 输出: 4->5->1->2->3->NULL
  */
-class Solution
-{
-public:
-    ListNode *rotateRight(ListNode *head, int k)
-    {
+class Solution {
+  public:
+    ListNode* rotateRight(ListNode* head, int k) {
         if (head == NULL || head->next == NULL)
             return head;
-        //1 求长度cnt  k=k%cnt;
+        // 1 求长度cnt  k=k%cnt;
         int cnt = 1;
-        ListNode *p = head;
-        while (p->next != NULL) //p成为最尾节点
+        ListNode* p = head;
+        while (p->next != NULL)  // p成为最尾节点
         {
             p = p->next;
             cnt += 1;
         }
-        k = k % cnt; //第cnt个节点开始，移动到头部
-        if (k == 0)
-        {
+        k = k % cnt;  //第cnt个节点开始，移动到头部
+        if (k == 0) {
             return head;
         }
 
-        ListNode *q = head;
-        cnt = cnt - k - 1; //q从head移动cnt后，成为首部的最尾节点
-        while (cnt != 0)
-        {
+        ListNode* q = head;
+        cnt = cnt - k - 1;  // q从head移动cnt后，成为首部的最尾节点
+        while (cnt != 0) {
             q = q->next;
             cnt -= 1;
         }
@@ -56,8 +52,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
     ListNode l1(1);
     ListNode l2(2);

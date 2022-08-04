@@ -15,7 +15,8 @@ class Solution {
     vector<int> spiralOrder(vector<vector<int>>& matrix) {
         // 1 left m*n consume  m*n - (m-2)*(n-2) = 2(m + n) - 4
         // 2 left m-1*n-1 consume m + n - 1
-        int n = matrix.size();     //行数
+        int n = matrix.size();  //行数
+
         int m = matrix[0].size();  //列数
         vector<int> res;
         vector<int> dx{0, 1, 0, -1};  // ->  ↓  <-  ↑

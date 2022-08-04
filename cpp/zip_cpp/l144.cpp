@@ -7,14 +7,12 @@ description:
 
 */
 
-//Class Solution
+// Class Solution
 
-class Solution
-{
-public:
+class Solution {
+  public:
     vector<int> res;
-    vector<int> preorderTraversal(TreeNode *root)
-    {
+    vector<int> preorderTraversal(TreeNode* root) {
         if (root == NULL)
             return res;
         res.push_back(root->val);
@@ -26,25 +24,20 @@ public:
     }
 };
 
-class Solution2
-{
-public:
-    vector<int> preorderTraversal(TreeNode *root)
-    {
-        stack<TreeNode *> q;
+class Solution2 {
+  public:
+    vector<int> preorderTraversal(TreeNode* root) {
+        stack<TreeNode*> q;
         if (root != NULL)
             q.push(root);
         vector<int> res;
-        while (!q.empty())
-        {
-            TreeNode *tmp = q.top();
+        while (!q.empty()) {
+            TreeNode* tmp = q.top();
             q.pop();
-            if (tmp->right != NULL)
-            {
+            if (tmp->right != NULL) {
                 q.push(tmp->right);
             }
-            if (tmp->left != NULL)
-            {
+            if (tmp->left != NULL) {
                 q.push(tmp->left);
             }
             res.push_back(tmp->val);
@@ -53,8 +46,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
 
     return 0;

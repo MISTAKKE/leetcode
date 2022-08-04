@@ -3,141 +3,41 @@ using namespace std;
 
 /*
 description:
-
-
 */
-
-// Class Solution
-class LRUCache1 {
-    /*
-    两个数组，data记录数字，-1是不存在  非-1是存在
-    sequence是时间值，用于标记新旧，越大约新
-*/
-  public:
-    vector<int> data;
-    vector<int> sequence;
-    int cap;
-    int time;
-    int nowsize;
-    LRUCache1(int capacity) {
-        data.resize(3001, -1);
-        sequence.resize(3001, -1);
-        cap = capacity;
-        time = 0;
-        nowsize = 0;
-    }
-    int get(int key) {
-        if (data[key] == -1)
-            return -1;
-        sequence[key] = ++time;
-        return data[key];
-    }
-
-    void put(int key, int value) {
-        if (nowsize == cap && data[key] == -1) {
-            int minval = 300000;
-            int mini = 3000;
-            for (int i = 0; i <= 3000; ++i) {
-                if (data[i] != -1) {
-                    if (sequence[i] < minval) {
-                        mini = i;
-                        minval = sequence[i];
-                    }
-                }
-            }
-            data[mini] = -1;
-            sequence[mini] = -1;
-            data[key] = value;
-            sequence[key] = ++time;
-        }
-        else {
-            if (data[key] == -1)
-                nowsize += 1;
-            data[key] = value;
-            sequence[key] = ++time;
-        }
-    }
-};
-
-class LRUCache2 {
-  public:
-    list<pair<int, int>> seq;
-    map<int, list<pair<int, int>>::iterator> mp;
-    int cap;
-    LRUCache2(int capacity) {
-        cap = capacity;
-    }
-    int get(int key) {
-        auto it = mp.find(key);
-        if (it != mp.end()) {
-            seq.splice(seq.begin(), seq, it->second);
-            /**
-             * 1 splice(target_container itreator_postion, from_container_itreator_toend);
-             * 2 splice(target_container itreator_postion, from_container, from_itreator);
-             * 3 list::splice(target_contailer iteartor_postion, from_container, from_itera, end_itera);
-             */
-            return it->second->second;
-        }
-        return -1;
-    }
-
-    void put(int key, int value) {
-        auto it = mp.find(key);
-        if (it != mp.end()) {
-            it->second->second = value;
-            seq.splice(seq.begin(), seq, it->second);
-            return;
-        }
-        seq.emplace_front(key, value);
-        /**
-         * insert to list first node
-         */
-        mp[key] = seq.begin();
-        if (seq.size() > cap) {
-            mp.erase(seq.back().first);
-            seq.pop_back();
-        }
-        return;
-    }
-};
-
-class LRUCache3 {
-  public:
-    LRUCache3(int cap_) {
-        cap = cap_;
-    }
-
-    int get(int key) {
-        auto it = mp.find(key);
-        if (it != mp.end()) {
-            seq.splice(seq.begin(), seq, it->second);
-            return it->second->second;
-        }
-        return -1;
-    }
-
-    void put(int key, int value) {
-        auto it = mp.find(key);
-        if (it != mp.end()) {
-            it->second->second = value;
-            seq.splice(seq.begin(), seq, it->second);
-            return;
-        }
-        seq.emplace_front(key, value);
-        mp[key] = seq.begin();
-        if (seq.size() > cap) {
-            mp.erase(seq.back().first);
-            seq.pop_back();
-        }
-    }
-
-  private:
-    int cap;
-    map<int, list<pair<int, int>>::iterator> mp;
-    list<pair<int, int>> seq;
-};
 
 // best way
+class LRUCache {
+  private:
+    int cap{0};
+    list<pair<int, int>> seq;
+    map<int, list<pair<int, int>>::iterator> mp;
+
+  public:
+    LRUCache(int c) : cap(c) {}
+    int get(int key) {
+        auto it = mp.find(key);
+        if (it == mp.end()) {
+            return -1;
+        }
+        seq.splice(seq.begin(), seq, it->second);
+        return it->second->second;
+    }
+    void put(int key, int value) {
+        auto it = mp.find(key);
+        if (it != mp.end()) {
+            seq.splice(seq.begin(), seq, it->second);
+            it->second->second = value;
+            return;
+        }
+        seq.push_front(make_pair(key, value));
+        mp[key] = seq.begin();
+        if (mp.size() > cap) {
+            mp.erase(seq.back().first);
+            seq.pop_back();
+        }
+    }
+};
+
 class LRUCache4 {
   public:
     /*
@@ -157,6 +57,11 @@ class LRUCache4 {
         auto it = mp.find(key);
         if (it != mp.end()) {
             seq.splice(seq.begin(), seq, it->second);  //把对应的iterator放到头部
+            /**
+             * 1 splice(target_container itreator_postion, from_container_itreator_toend);
+             * 2 splice(target_container itreator_postion, from_container, from_itreator); //
+             * 3 list::splice(target_contailer iteartor_postion, from_container, from_itera, end_itera);
+             */
             return it->second->second;
         }
         return -1;
@@ -178,41 +83,6 @@ class LRUCache4 {
     }
 };
 
-class LRUCache {
-  public:
-    int cap{0};
-    list<pair<int, int>> freq;
-    map<int, list<pair<int, int>>::iterator> mp;
-    LRUCache(int c) : cap(c) {}
-    int get(int key) {
-        auto it = mp.find(key);
-        if (it != mp.end()) {
-            freq.splice(freq.begin(), freq, it->second);
-            return it->second->second;
-        }
-        return -1;
-    }
-    void put(int key, int value) {
-        if (cap == 0) {
-            return;
-        }
-        auto it = mp.find(key);
-        if (it != mp.end()) {
-            freq.splice(freq.begin(), freq, it->second);
-            it->second->second = value;
-            return;
-        }
-        else {
-            pair<int, int> p(key, value);
-            freq.insert(freq.begin(), p);
-            mp[key] = freq.begin();
-            if (mp.size() > cap) {
-                mp.erase(freq.back().first);
-                freq.pop_back();
-            }
-        }
-    }
-};
 /**
  * Your LRUCache object will be instantiated and called as such:
  * LRUCache* obj = new LRUCache(capacity);

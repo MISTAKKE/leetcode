@@ -13,57 +13,46 @@ strs 中的所有单词都具有相同的长度，且是彼此的字母异位词
 
 */
 
-//Class Solution
-class Solution
-{
-public:
+// Class Solution
+class Solution {
+  public:
     int len;
     int n;
     vector<int> parent;
-    int find(int idx)
-    {
+    int find(int idx) {
         return idx == parent[idx] ? idx : parent[idx] = find(parent[idx]);
     }
-    int numSimilarGroups(vector<string> &strs)
-    {
+    int numSimilarGroups(vector<string>& strs) {
         n = strs.size();
         if (n <= 1)
             return n;
         len = strs[0].size();
         parent.resize(n);
-        for (int i = 0; i < n; ++i)
-        {
-            parent[i]= i;
+        for (int i = 0; i < n; ++i) {
+            parent[i] = i;
         }
         show(parent);
-        for (int i = 0; i < n; ++i)
-        {
-            for (int j = 0; j < n; ++j)
-            {
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
                 int pi = find(i);
                 int pj = find(j);
-                if (pi != pj && issame(strs[i], strs[j]))
-                {
+                if (pi != pj && issame(strs[i], strs[j])) {
                     parent[pi] = pj;
                 }
             }
         }
         show(parent);
         int ret = 0;
-        for (int i = 0; i < n; ++i)
-        {
-            if(find(i)==i)
-                ret +=1;
+        for (int i = 0; i < n; ++i) {
+            if (find(i) == i)
+                ret += 1;
         }
         return ret;
     }
-    bool issame(const string &a, const string &b)
-    {
+    bool issame(const string& a, const string& b) {
         int diffcnt = 0;
-        for (int i = 0; i < len; ++i)
-        {
-            if (a[i] != b[i])
-            {
+        for (int i = 0; i < len; ++i) {
+            if (a[i] != b[i]) {
                 diffcnt++;
                 if (diffcnt > 2)
                     return false;
@@ -73,10 +62,10 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
-    vector<string> str{"zkhnmefhyr","ykznfhehmr","mkhnyefrzh","zkhnyefrmh","zkmnhefhyr","ykznhfehmr","zkynhfehmr","mkhnhefrzy","zkhnmefryh","zkmnhfehyr"};
+    vector<string> str{"zkhnmefhyr", "ykznfhehmr", "mkhnyefrzh", "zkhnyefrmh", "zkmnhefhyr",
+                       "ykznhfehmr", "zkynhfehmr", "mkhnhefrzy", "zkhnmefryh", "zkmnhfehyr"};
     cout << A.numSimilarGroups(str) << endl;
     return 0;
 }

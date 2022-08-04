@@ -25,63 +25,49 @@ Solution1
 
 
 */
-class Solution1
-{
-public:
-    string longestWord(vector<string> &words)
-    {
+class Solution1 {
+  public:
+    string longestWord(vector<string>& words) {
         string ret = "";
         Trie t;
-        for (auto &word : words)
-        {
+        for (auto& word : words) {
             t.insert(word);
         }
-        for (auto &word : words)
-        {
-            if (t.exist(word))
-            {
+        for (auto& word : words) {
+            if (t.exist(word)) {
                 if (word.size() > ret.size() || (word.size() == ret.size() && word < ret))
                     ret = word;
             }
         }
         return ret;
     }
-    class Node
-    {
-    public:
+    class Node {
+      public:
         char c;
         bool end;
         map<char, Node> mp;
-        Node(char _c = ' ')
-        {
+        Node(char _c = ' ') {
             c = _c;
             end = false;
         }
     };
-    class Trie
-    {
-    public:
+    class Trie {
+      public:
         Node root;
-        void insert(string &res)
-        {
-            Node *node = &root;
-            for (auto &c : res)
-            {
-                if (node->mp.find(c) == node->mp.end())
-                {
+        void insert(string& res) {
+            Node* node = &root;
+            for (auto& c : res) {
+                if (node->mp.find(c) == node->mp.end()) {
                     node->mp[c] = Node(c);
                 }
                 node = &(node->mp[c]);
             }
             node->end = true;
         }
-        bool exist(string &res)
-        {
-            Node *node = &root;
-            for (auto &c : res)
-            {
-                if (node->mp.find(c) == node->mp.end() || !node->mp[c].end)
-                {
+        bool exist(string& res) {
+            Node* node = &root;
+            for (auto& c : res) {
+                if (node->mp.find(c) == node->mp.end() || !node->mp[c].end) {
                     return false;
                 }
                 node = &(node->mp[c]);
@@ -91,21 +77,16 @@ public:
     };
 };
 
-class Solution
-{
-public:
-    string longestWord(vector<string> &words)
-    {
+class Solution {
+  public:
+    string longestWord(vector<string>& words) {
         Trie t;
         string ret = "";
-        for (auto &word : words)
-        {
+        for (auto& word : words) {
             t.insert(word);
         }
-        for (auto &word : words)
-        {
-            if (t.exist(word))
-            {
+        for (auto& word : words) {
+            if (t.exist(word)) {
                 if (word.size() > ret.size() || (word.size() == ret.size() && word < ret))
                     ret = word;
             }
@@ -113,36 +94,28 @@ public:
         return ret;
     }
 
-    class Trie
-    {
-    public:
+    class Trie {
+      public:
         bool end;
-        vector<Trie *> vec;
-        Trie()
-        {
+        vector<Trie*> vec;
+        Trie() {
             vec.resize(26, NULL);
             end = false;
         }
-        void insert(string &res)
-        {
-            Trie *tree = this;
-            for (auto &c : res)
-            {
-                if (tree->vec[c - 'a'] == NULL)
-                {
+        void insert(string& res) {
+            Trie* tree = this;
+            for (auto& c : res) {
+                if (tree->vec[c - 'a'] == NULL) {
                     tree->vec[c - 'a'] = new Trie();
                 }
                 tree = tree->vec[c - 'a'];
             }
             tree->end = true;
         }
-        bool exist(string &res)
-        {
-            Trie *tree = this;
-            for (auto &c : res)
-            {
-                if (tree->vec[c - 'a'] == NULL || !(tree->vec[c - 'a']->end))
-                {
+        bool exist(string& res) {
+            Trie* tree = this;
+            for (auto& c : res) {
+                if (tree->vec[c - 'a'] == NULL || !(tree->vec[c - 'a']->end)) {
                     return false;
                 }
                 tree = tree->vec[c - 'a'];
@@ -151,8 +124,7 @@ public:
         }
     };
 };
-int main()
-{
+int main() {
     Solution A;
     vector<string> vec{"a", "bc", "bcd", "bcde", "ab", "abc", "abcd", "b"};
     // vector<string> vec{"a", "ab"};

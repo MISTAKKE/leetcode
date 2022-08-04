@@ -2,16 +2,15 @@
 using namespace std;
 
 class Solution {
-public:
+  public:
     int rob(TreeNode* root) {
         vector<int> res = dfs(root);
         return max(res[0], res[1]);
     }
 
-    vector<int> dfs(TreeNode *root)
-    {
+    vector<int> dfs(TreeNode* root) {
         vector<int> res{0, 0};
-        if(root==NULL)
+        if (root == NULL)
             return res;
         vector<int> l = dfs(root->left);
         vector<int> r = dfs(root->right);
@@ -21,8 +20,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
 
     return 0;

@@ -9,18 +9,14 @@ description:
     结果符合 32 位符号整数
 */
 
-//Class Solution
-class Solution
-{
-public:
-    int change(int amount, vector<int> &coins)
-    {
+// Class Solution
+class Solution {
+  public:
+    int change(int amount, vector<int>& coins) {
         vector<int> dp(amount + 1, 0);
         dp[0] = 1;
-        for (auto &&coin : coins)
-        {
-            for (int i = 0; i + coin <= amount; i++)
-            {
+        for (auto&& coin : coins) {
+            for (int i = 0; i + coin <= amount; i++) {
                 dp[i + coin] += dp[i];
             }
         }
@@ -28,8 +24,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
 
     return 0;

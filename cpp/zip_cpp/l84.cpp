@@ -14,29 +14,23 @@ tips:
     sum(a to b) 可由 sumvec 求得
 */
 
-//Class Solution
-class Solution
-{
-public:
-    int largestRectangleArea(vector<int> &heights)
-    {
-        if (heights.size() == 0)
-        {
+// Class Solution
+class Solution {
+  public:
+    int largestRectangleArea(vector<int>& heights) {
+        if (heights.size() == 0) {
             return 0;
         }
         vector<int> sumval(heights.size(), 0);
         sumval[0] = heights[0];
-        for (int i = 1; i < heights.size(); ++i)
-        {
+        for (int i = 1; i < heights.size(); ++i) {
             sumval[i] = sumval[i - 1] + heights[i];
         }
         show(sumval);
         int res = 0;
         stack<int> s;
-        for (int i = 0; i < heights.size(); ++i)
-        {
-            while (!s.empty() && heights[s.top()] >= heights[i])
-            {
+        for (int i = 0; i < heights.size(); ++i) {
+            while (!s.empty() && heights[s.top()] >= heights[i]) {
                 int h = s.top();
                 s.pop();
                 int l = s.empty() ? -1 : s.top();
@@ -47,8 +41,7 @@ public:
             }
             s.push(i);
         }
-        while (!s.empty())
-        {
+        while (!s.empty()) {
             int h = s.top();
             s.pop();
             int l = s.empty() ? -1 : s.top();
@@ -61,8 +54,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
     // vector<int> vec{3, 1, 6, 4, 5, 2};
     vector<int> vec{2, 1, 5, 6, 2, 3};

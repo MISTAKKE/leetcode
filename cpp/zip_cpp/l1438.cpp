@@ -9,23 +9,18 @@ description:
     所有数字遍历完成后，列表长度为所求
 */
 
-//Class Solution
-class Solution
-{
-public:
-    int longestSubarray(vector<int> &nums, int limit)
-    {
+// Class Solution
+class Solution {
+  public:
+    int longestSubarray(vector<int>& nums, int limit) {
         map<int, int> mp;
         int i = 0, j = 0;
-        while (j < nums.size())
-        {
+        while (j < nums.size()) {
             mp[nums[j]] = j;
             // cout << "j:" << j <<" i:"<<i<< " begin:" << mp.begin()->first << " end:" << mp.rbegin()->first << endl;
-            if (mp.rbegin()->first - mp.begin()->first > limit)
-            {
+            if (mp.rbegin()->first - mp.begin()->first > limit) {
                 auto target = mp.find(nums[i]);
-                if (target != mp.end() && target->second == i)
-                {
+                if (target != mp.end() && target->second == i) {
                     mp.erase(target);
                 }
                 i++;
@@ -36,8 +31,7 @@ public:
     }
 };
 
-int main()
-{
+int main() {
     Solution A;
 
     vector<int> vec{1, 1, 1, 2, 31, 91, 1, 2};
