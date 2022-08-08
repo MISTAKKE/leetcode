@@ -4,8 +4,79 @@ using namespace std;
 /*
 description:
 
-
+k == lists.length
+0 <= k <= 10^4
+0 <= lists[i].length <= 500
+-10^4 <= lists[i][j] <= 10^4
+lists[i] 按 升序 排列
+lists[i].length 的总和不超过 10^4
 */
+
+// 22.30
+
+class Solution {
+  public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        ListNode* head = new ListNode(0);
+        ListNode* tail = head;
+        priority_queue<int, vector<int>, greater<int>> q;
+        for (int i = 0; i < lists.size(); ++i) {
+            if (lists[i] != nullptr) {
+                q.push((10001 + lists[i]->val) * 10001 + i);
+            }
+        }
+        while (!q.empty()) {
+            int idx = q.top() % 10001;
+            q.pop();
+            tail->next = lists[idx];
+            tail = tail->next;
+            lists[idx] = lists[idx]->next;
+            if (lists[idx] != nullptr) {
+                q.push((10001 + lists[idx]->val) * 10001 + idx);
+            }
+        }
+
+        tail = head->next;
+        delete head;
+        return tail;
+    }
+};
+
+class Cmp {
+  public:
+    bool operator()(const pair<int, ListNode*> a, const pair<int, ListNode*> b) {
+        return a.second->val > b.second->val;
+    }
+};
+class Solution_99 {
+  public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        ListNode* head = new ListNode(0);
+        ListNode* tail = head;
+        priority_queue<pair<int, ListNode*>, vector<pair<int, ListNode*>>, Cmp> q;
+
+        for (int i = 0; i < lists.size(); ++i) {
+            if (lists[i] != nullptr) {
+                q.push(make_pair(i, lists[i]));
+            }
+        }
+        while (!q.empty()) {
+            ListNode* p = q.top().second;
+            int idx = q.top().first;
+            q.pop();
+            tail->next = p;
+            tail = p;
+            cout << "p->val:" << p->val << endl;
+            if (lists[idx]->next != nullptr) {
+                lists[idx] = lists[idx]->next;
+                q.push(make_pair(idx, lists[idx]));
+            }
+        }
+        ListNode* tmp = head->next;
+        delete head;
+        return tmp;
+    }
+};
 
 class Solution1 {
   public:
@@ -119,7 +190,7 @@ class Solution_bad {
     }
 };
 
-class Solution {
+class Solution3 {
   public:
     class Node {
       public:
