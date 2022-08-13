@@ -9,6 +9,39 @@ description:
 
 // Class Solution
 
+class Solution {
+  private:
+    map<int, int> inorder_mp;
+
+  public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        for (int i = 0; i < inorder.size(); ++i) {
+            inorder_mp[inorder[i]] = i;
+        }
+        return helper(preorder, inorder, 0, preorder.size() - 1, 0, inorder.size() - 1);
+    }
+    // 前序遍历 preorder = [3,9,20,15,7]
+    // 中序遍历 inorder = [9,3,15,20,7]
+    TreeNode* helper(vector<int>& preorder,
+                     vector<int>& inorder,
+                     int preorderstart,
+                     int preorderend,
+                     int inorderstart,
+                     int inorderend) {
+        if (preorderend < preorderstart || inorderend < inorderstart) {
+            return nullptr;
+        }
+        TreeNode* root = new TreeNode(preorder[preorderstart]);
+        int rootinorderidx = inorder_mp[preorder[preorderstart]];
+        int leftsize = rootinorderidx - inorderstart;
+        root->left =
+            helper(preorder, inorder, preorderstart + 1, preorderstart + leftsize, inorderstart, rootinorderidx - 1);
+        root->right =
+            helper(preorder, inorder, preorderstart + leftsize + 1, preorderend, rootinorderidx + 1, inorderend);
+        return root;
+    }
+};
+
 class Solution1 {
   private:
     unordered_map<int, int> index;
@@ -47,7 +80,7 @@ class Solution1 {
     }
 };
 
-class Solution {
+class Solution3 {
   private:
     unordered_map<int, int> index;
 

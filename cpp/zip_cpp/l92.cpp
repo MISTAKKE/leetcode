@@ -6,6 +6,37 @@ description:
 
 
 */
+// Class Solution
+class Solution  //需要一个空的头
+{
+  public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        ListNode *h = new ListNode(0);
+        h->next = head;
+        int cnt = 1;
+        ListNode *tail = h;
+        while(cnt < left){
+            tail = tail->next;
+            ++cnt;
+        }
+        ListNode *first = tail ->next;
+        if(first == nullptr){
+            return head;
+        }
+        // h -> head(a) -> b          -> c      -> d -> e  -> f -> g -> h
+        //                 tail         [first                 ]
+        while(cnt<right && first->next !=nullptr){
+            ListNode *tmp = first->next;
+            first->next = first->next->next;
+            tmp->next = tail->next;
+            tail->next = tmp;
+            ++cnt;
+        }
+        head = h ->next;
+        delete h;
+        return head;
+    }
+};
 
 // Class Solution
 class Solution1  //需要一个空的头
@@ -34,7 +65,7 @@ class Solution1  //需要一个空的头
     }
 };
 
-class Solution  //不需要一个空的头
+class Solution2  //不需要一个空的头
 {
   public:
     ListNode* reverseBetween(ListNode* head, int left, int right) {
