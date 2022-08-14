@@ -6,9 +6,32 @@ description:
 
 
 */
+class Solution {
+  public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        backtrack(res, nums, 0);
+        return res;
+    }
+    void backtrack(vector<vector<int>>& res, vector<int>& nums, int start) {
+        // end
+        if (start == nums.size()) {
+            res.push_back(nums);
+            return;
+        }
+
+        // try
+        backtrack(res, nums, start + 1);
+        for (int i = start + 1; i < nums.size(); ++i) {
+            swap(nums[start], nums[i]);
+            backtrack(res, nums, start + 1);
+            swap(nums[i], nums[start]);
+        }
+    }
+};
 
 // Class Solution
-class Solution {
+class Solution2 {
   public:
     vector<vector<int>> permute(vector<int>& nums) {
         vector<vector<int>> res;

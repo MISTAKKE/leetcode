@@ -6,6 +6,24 @@ description:
 
 
 */
+class Solution {
+public:
+    bool isSymmetric(TreeNode* root) {
+        return isTwoSymmetric(root->left, root->right);
+    }
+    bool isTwoSymmetric(TreeNode* l, TreeNode* r) {
+        if(l==nullprt && r==nullprt){
+            return true;
+        }
+        if(l==nullprt || r==nullprt){
+            return false;
+        }
+        if(l->val != r->val){
+            return false;
+        }
+        return isTwoSymmetric(l->left, r->right) && isTwoSymmetric(l->right, r->left);
+    }
+};
 
 // Class Solution
 class Solution1  // bsf + no recursion
@@ -57,7 +75,7 @@ class Solution1  // bsf + no recursion
 };
 
 // Class Solution
-class Solution  // recursion
+class Solution2  // recursion
 {
   public:
     bool isSymmetric(TreeNode* root) {
