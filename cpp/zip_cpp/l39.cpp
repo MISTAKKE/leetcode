@@ -8,8 +8,32 @@ description:
 */
 
 // Class Solution
-
 class Solution {
+  public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> ans;
+        vector<int> nowval;
+        dfs(candidates, nowval, ans, target, 0);
+        return ans;
+    }
+    void dfs(vector<int>& candidates, vector<int>& nowval, vector<vector<int>>& ans, int target, int idx) {
+        if (idx == candidates.size()) {
+            return;
+        }
+        if (target == 0) {
+            ans.push_back(nowval);
+            return;
+        }
+        dfs(candidates, nowval, ans, target, idx + 1);
+        if (target - candidates[idx] >= 0) {
+            nowval.push_back(candidates[idx]);
+            dfs(candidates, nowval, ans, target - candidates[idx], idx);
+            nowval.pop_back();
+        }
+    }
+};
+
+class Solution3 {
   public:
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
         vector<vector<int>> ans;

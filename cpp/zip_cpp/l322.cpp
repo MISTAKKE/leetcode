@@ -32,10 +32,32 @@ description:
 */
 
 // Class Solution
+class Solution {
+  public:
+    int coinChange(vector<int>& coins, int amount) {
+        sort(coins.begin(), coins.end());
+        vector<int> dp(amount + 1, 0x7fffffff);
+        dp[0] = 0;
+        for (auto&& c : coins) {
+            if (c <= amount) {
+                dp[c] = 1;
+            }
+        }
+        for (int i = 2; i <= amount; ++i) {
+            //如果 i 能凑齐 一定是从某个值 [得到] 一枚硬币而成功
+            for (auto&& c : coins) {
+                if (i >= c && dp[i - c] != 0x7fffffff) {
+                    dp[i] = min(dp[i], dp[i - c] + 1);
+                }
+            }
+        }
+
+        return dp[amount] == 0x7fffffff ? -1 : dp[amount];
+    }
+};
 
 //非递归
-
-class Solution {
+class Solution2 {
   public:
     int coinChange(vector<int>& coins, int amount) {
         sort(coins.begin(), coins.end());
@@ -60,6 +82,6 @@ class Solution {
 int main() {
     Solution A;
     vector<int> coins{1, 2, 5};
-    cout << A.coinChange(coins, 11) << endl;
+    cout << A.coinChange(coins, 0) << endl;
     return 0;
 }
