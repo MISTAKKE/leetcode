@@ -13,12 +13,12 @@ public:
             return 0;
         }
         int hold = 0 - prices[0];
-        int not = 0;
+        int nothold = 0;
         for(int i = 1; i<prices.size(); ++i){
-            hold = max(not - prices[i], hold);
-            not = max(prices[i] + hold, not);
+            nothold = max(prices[i] + hold, nothold);
+            hold = max(nothold - prices[i], hold);
         }
-        return not;
+        return nothold;
     }
 };
 

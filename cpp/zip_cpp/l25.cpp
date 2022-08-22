@@ -10,8 +10,38 @@ description:
 */
 
 // Class Solution
-
 class Solution {
+  public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        // prehead [ cur .. p] [ cur .. p]  ..
+        ListNode *prehead = new ListNode(0);
+        prehead->next = head;
+        ListNode *p = prehead;
+        int idx = 0;
+        while(head != nullptr){
+            head = head->next;
+            if(++idx==k){
+                //reverse
+                ListNode *cur = p->next;
+                while(cur->next != head){
+                    ListNode *node = cur->next;
+                    cur->next = cur->next->next;
+                    node->next = p->next;
+                    p->next = node;
+                }
+                p = cur;
+                idx = 0;
+            }
+        }
+        head = prehead->next;
+        delete prehead;
+        return head;
+    }
+};
+
+
+
+class Solution1 {
   public:
     ListNode* reverseKGroup(ListNode* head, int k) {
         ListNode* prehead = new ListNode(0);
@@ -140,6 +170,6 @@ int main() {
     l2.next = &l3;
     l3.next = &l4;
     l4.next = &l5;
-    show(A.reverseKGroup(&l1, 1));
+    show(A.reverseKGroup(&l1, 2));
     return 0;
 }

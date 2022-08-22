@@ -1,4 +1,7 @@
-#include "/root/leetcode/tool/helper.cpp"
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
 using namespace std;
 
 /*
@@ -27,7 +30,7 @@ public:
     
     string demo(string s, vector<vector<int>>& pairs) {
         vector<vector<int>>res;
-        sort(res.begin(), res.end(), comp);
+        std::sort(res.begin(), res.end(), comp);
         priority_queue<Node, vector<Node>, less<Node>> neighbor;
         return "";
     }

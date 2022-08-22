@@ -201,9 +201,15 @@ class Solution3 {
         bool operator<(const Node& b) const {
             return data->val > b.data->val;
         }
+        
     };
-
+    static bool comp(const vector<int>&a, const vector<int>&b){
+        return a[0] < b[0];
+    }
     ListNode* mergeKLists(vector<ListNode*>& lists) {
+        priority_queue<int, vector<int>, greater<int>>q2;
+        vector<vector<int>>seq;
+        sort(seq.begin(), seq.end(), comp);
         priority_queue<Node> q;
         for (int i = 0; i < lists.size(); ++i) {
             if (lists[i] != NULL) {

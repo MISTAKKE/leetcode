@@ -6,7 +6,22 @@ description:
     0 <= nums.length <= 100
     0 <= nums[i] <= 400
 */
-
+class Solution {
+public:
+    int rob(vector<int>& nums) {
+        if(nums.size()==0){
+            return 0;
+        }
+        int dorob = nums[0];
+        int notrob = 0;
+        for(int i = 1;i<nums.size();++i){
+            int newdorob = max(nums[i] + notrob, dorob);
+            notrob = max(notrob, dorob);
+            dorob = newdorob;
+        }
+        return max(dorob, notrob);
+    }
+};
 // Class Solution
 class Solution1  // 4 param
 {
@@ -27,7 +42,7 @@ class Solution1  // 4 param
     }
 };
 
-class Solution  // 3 param
+class Solution3  // 3 param
 {
   public:
     int rob(vector<int>& nums) {

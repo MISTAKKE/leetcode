@@ -4,16 +4,45 @@ using namespace std;
 /*
 description:
 */
-
-// best way
+// 19.27
 class LRUCache {
+private:
+    int cap{0};
+    list<pair<int,int>> seq;
+    map<int, list<pair<int,int>>::iterator> mp;
+public:
+    LRUCache(int c):cap(c){}
+    void put(int key, int val) {
+        auto it = mp.find(key);
+        if(it == mp.end()){
+            seq.push_front(make_pair(key, val));
+            mp[key] = seq.begin();
+            if(mp.size()==cap){
+                mp.erase(seq.back().first);
+                seq.pop_back();
+            }
+        }
+        seq.splice(seq.begin(), seq, it->second);
+        it->second->second = val;
+    }
+    int get(int key) {
+        auto it = mp.find(key);
+        if(it == mp.end()){
+            return -1;
+        }
+        seq.splice(seq.begin(), seq, it->second);
+        return it->second->second;
+    }
+};
+
+class LRUCache2 {
   private:
     int cap{0};
     list<pair<int, int>> seq;
     map<int, list<pair<int, int>>::iterator> mp;
 
   public:
-    LRUCache(int c) : cap(c) {}
+    LRUCache2(int c) : cap(c) {}
     int get(int key) {
         auto it = mp.find(key);
         if (it == mp.end()) {
@@ -97,7 +126,7 @@ class LRUCache4 {
 */
 
 int main() {
-    LRUCache lRUCache(2);
+    LRUCache2 lRUCache(2);
     lRUCache.put(1, 1);               // 缓存是 {1=1}
     lRUCache.put(2, 2);               // 缓存是 {1=1, 2=2}
     cout << lRUCache.get(1) << endl;  // 返回 1
