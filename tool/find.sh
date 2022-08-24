@@ -5,7 +5,7 @@ if [[ $# -le 0 ]]; then
     exit
 fi
 
-RESULT=$(grep -rnia $1 * )
+RESULT=$(grep -rnia $1 $2 --binary-files=without-match |grep -v STL)
 if [[ $RESULT != "" ]]; then
     echo "$RESULT"
 fi

@@ -15,6 +15,14 @@
 #include <numeric>
 #include <bits/stdc++.h>
 using namespace std;
+//自定义排序
+// auto comp = [](const pair<int, int>& a, const pair<int, int>& b) { return a.first > b.first; };
+
+// priority_queue<pair<int, int>, vector<pair<int, int>>, decltype(comp)> q(comp); // 堆相反 q.top()是最小
+
+// vector<pair<int,int>>re;
+// sort(re.begin(), re.end(), comp); // 数组的排序与 comp内部实现相同 re是从大到小 ； 如果换成了 greater<int>也是从大到小
+
 struct ListNode {
     int val;
     ListNode *next;
