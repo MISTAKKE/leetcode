@@ -3,24 +3,15 @@ using namespace std;
 
 /*
 description:
-
-笔试题目		
-1. 实现单向链表归并排序
-#include <iostream> 
-using namespace std;  
-struct node { 	
-int data; 	
-struct node* next; 	
-node(int x):data(x),next(NULL){} }
-
 2. 给定一个无序数组，求数组中的中位数
 
 3. 给定一个整数数组，i<j, 求a[i]+a[j]+j-i的最大值
 
 
 
+/*
+1. 实现单向链表归并排序
 */
-
 // ListNode* mergesort(ListNode* head){
 //     if(head == nullptr || head->next == nullptr){
 //         return head;
@@ -59,9 +50,12 @@ node(int x):data(x),next(NULL){} }
 //     return head;
 // }
 
-
-// // 2. 给定一个无序数组，求数组中的中位数
-// double findmid(const vector<int> &vec){
+/*
+2. 给定一个无序数组，求数组中的中位数
+    1. 使用堆 o(N*lgN) 的时间复杂度 o(N) 的空间复杂度
+    2. 快排 o(lgN*lgN)的时间复杂度
+*/
+// double findmid1(const vector<int> &vec){
 //     if(vec.empty()){
 //         return 0;
 //     }
@@ -92,56 +86,105 @@ node(int x):data(x),next(NULL){} }
 //     ret_val = q.top();
 //     q.pop();
 //     ret_val = (ret_val + q.top()) / 2.0;
-//     return val;
+//     return ret_val;
 // }
 
-
-// // 3. 给定一个整数数组，i<j, 求a[i]-i + a[j]+j的最大值
-// /*
-// 1. o(n^2) 的时间复杂度 两次遍历
-// 2. 计算出 vec+idx 和 vec-idx 两个数组，求两个数组的maxval之和
-//     1）vec1 和 vec2 的idx不相同
-//     2) vec1 不用保存，存两个数即可
-// */
-// // Class Solution
-
-// int getvectorval(const vector<int> &vec){
-//     if(vec.size() < 2){
-//         return 0;//error
+// //return findidx_th of vec, which vec is not sorted, started from 0
+// int findidxthval(vector<int> &vec, int start, int end, int findidx){
+//     if(end == start){
+//         return vec[start];
 //     }
-//     //idx
-//     int idx11 = 0, idx12 = 1; // vec1 = vec - idx   //   vec[idx11] >= vec[idx12]
-//     int idx21 = 0, idx22 = 1; // vec2 = vec + idx
-//     if(vec[1] - 1> vec[0]){
-//         idx11 = 1;
-//         idx12 = 0;
-//     }
-//     if(vec[1] + 1> vec[0]){
-//         idx21 = 1;
-//         idx22 = 0;
-//     }
-//     //cal vec-nm
-//     for(int i = 2; i<vec.size(); ++i){
-//         //val
-//         int sub = vec[i] - i;
-//         int add = vec[i] + i;
-//         //idx
-//         if(sub >= vec[idx11]){
-//             idx12 = idx11;
-//             idx11 = i;
+//     //find a place for the first
+//     int start_orig = start;
+//     int end_orig = end;
+//     while(start < end){
+//         while(start < end && vec[start] <= vec[start_orig]){
+//             ++start;   
 //         }
-//         if(add >= vec[idx21]){
-//             idx22 = idx21;
-//             idx21 = i;
+//         while(start < end && vec[end] > vec[start_orig]){
+//             --end;
+//         }
+//         if(start < end){
+//             swap(vec[start], vec[end]);
 //         }
 //     }
-//     if(idx11 != idx21){
-//         return vec[idx11] + vec[idx21] - idx11 + idx21;
+//     //start==end 小于等于第一个值的点的个数
+//     int lessorequal_to_firstnode_cnt = start - start_orig + (vec[start] <= vec[start_orig]);
+//     // 如果相等 则返回第一个
+//     if (lessorequal_to_firstnode_cnt == findidx + 1){
+//         return vec[start_orig];
 //     }
-//     return max(vec[idx11] + vec[idx22] - idx11 + idx22, vec[idx12] + vec[idx21] - idx12 + idx21);
+//     else if(lessorequal_to_firstnode_cnt > findidx + 1){
+//         // 如果太多，则剔除第一个，保留剩下所有的
+//         return findidxthval(vec, start_orig + 1, start - (vec[start] > vec[start_orig]), findidx);
+//     }
+//     // 如果太少，则使用右侧的
+//     return findidxthval(vec, start + (vec[start] <= vec[start_orig]), end_orig, findidx - lessorequal_to_firstnode_cnt);
 // }
-#include <iostream>
-#include <vector>
+
+// double findmid2(vector<int> &vec){
+//     if(vec.empty()){
+//         return 0;
+//     }
+//     //偶数个
+//     if(vec.size()%2 == 0){
+//         double val = findidxthval(vec, 0, vec.size()-1, vec.size()/2 - 1);
+//         val += findidxthval(vec, 0, vec.size()-1, vec.size()/2);
+//         return val / 2;
+//     }
+//     //奇数个
+//     return findidxthval(vec, 0, vec.size()-1, vec.size()/2);
+// }
+
+/*
+3. 给定一个整数数组，i<j, 求a[i]-i + a[j]+j的最大值
+    1. o(n^2) 的时间复杂度 两次遍历
+    2. 计算出 vec+idx 和 vec-idx 两个数组，求两个数组的maxval之和
+        1）vec1 和 vec2 的idx不相同
+        2) vec1 不用保存，存两个数即可
+*/
+
+int getvectorval(const vector<int> &vec){
+    if(vec.size() < 2){
+        return 0;//error
+    }
+    //idx
+    int idx11 = 0, idx12 = 1; // vec1 = vec - idx   //   vec[idx11] >= vec[idx12]
+    int idx21 = 0, idx22 = 1; // vec2 = vec + idx
+    if(vec[1] - 1> vec[0]){
+        idx11 = 1;
+        idx12 = 0;
+    }
+    if(vec[1] + 1> vec[0]){
+        idx21 = 1;
+        idx22 = 0;
+    }
+    //cal vec-nm
+    for(int i = 2; i<vec.size(); ++i){
+        //val
+        int sub = vec[i] - i;
+        int add = vec[i] + i;
+        //idx
+        if(sub >= vec[idx11]){
+            idx12 = idx11;
+            idx11 = i;
+        }
+        if(add >= vec[idx21]){
+            idx22 = idx21;
+            idx21 = i;
+        }
+    }
+    if(idx11 != idx21){
+        return vec[idx11] + vec[idx21] - idx11 + idx21;
+    }
+    return max(vec[idx11] + vec[idx22] - idx11 + idx22, vec[idx12] + vec[idx21] - idx12 + idx21);
+}
+
+/*
+s1 和 s2是有序的，求s2是否是s1的子序列
+1. 两个指针
+2. 提前结束条件，s2比s1小，直接返回faslse
+*/
 bool issubset(const vector<int> &s1, const vector<int> &s2){
     //return true is s2 si subset of s1
     if(s2.empty()){
@@ -152,20 +195,23 @@ bool issubset(const vector<int> &s1, const vector<int> &s2){
     }
     int idx1 = 0, idx2 = 0;
     while(idx1!=s1.size() && idx2!=s2.size()){
-        if(s1[idx1] == s2[idx2]){
+        if(s1[idx1] > s2[idx2]){
+            return false;
+        }
+        else if(s1[idx1] == s2[idx2]){
             ++idx2;
         }
+        else 
         ++idx1;
     }
     return idx2 == s2.size();
 }
 int main() {
-    vector<int> s1 { 0,1,2,3,4,5,9};
-    vector<int> s2 { 1,2,32,5};
-    if(issubset(s1, s2))
-    {
-        cout<<"ddd"<<endl;
+    vector<int> vec{1,4,6,7,3,2,5,8,9,7,7,7,7,7,7};
+                 // 1,2,3,4,5,6,7,7,7,7,7,7,7,8,9
+                 // 1,4,4,4,77777777777777777,9,9
+    for(int i = 0;i < vec.size(); ++i){
+        cout<<"i="<<i<<" val="<<findidxthval(vec, 0, vec.size()-1, i)<<endl;
     }
-    return 0;
 }
 
