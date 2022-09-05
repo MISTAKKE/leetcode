@@ -3,52 +3,53 @@ using namespace std;
 
 /*
 description:
-2. 给定一个无序数组，求数组中的中位数
-
-3. 给定一个整数数组，i<j, 求a[i]+a[j]+j-i的最大值
-
-
-
-/*
+wx活水2面
 1. 实现单向链表归并排序
+2. 给定一个无序数组，求数组中的中位数
+3. 给定一个整数数组，i<j, 求a[i]+a[j]+j-i的最大值
 */
-// ListNode* mergesort(ListNode* head){
-//     if(head == nullptr || head->next == nullptr){
-//         return head;
-//     }
-//     ListNode *fast = head->next, *slow = head;
-//     while(fast!=nullptr && fast->next !=nullptr){
-//         fast = fast->next->next;
-//         slow = slow->next;
-//     }
-//     //split as head and newhead
-//     ListNode* newhead = slow->next;
-//     slow->next = nullptr;
-//     //sort two list
-//     head = mergesort(head);
-//     newhead = mergesort(newhead);
-//     if(newhead == nullptr){
-//         return head;
-//     }
-//     //swap to make head is smaller
-//     if(head->val > newhead->val){
-//         ListNode *tmp = newhead;
-//         newhead = head;
-//         head = tmpl
-//     }
-//     //merge two list
-//     ListNode *last = head;
-//     while(newhead!=nullptr){
-//         if(last->next->val >= newhead->val){
-//             ListNode *tmp = newhead;
-//             newhead = newhead->next;
-//             tmp->next = last->next;
-//             last->next = tmp;
-//         }
-//         last = last->next;
-//     }
-//     return head;
-// }
+
+// 1. 实现单向链表归并排序
+ListNode* mergesort(ListNode* head){
+    if(head == nullptr || head->next == nullptr){
+        return head;
+    }
+    ListNode *fast = head->next, *slow = head;
+    while(fast!=nullptr && fast->next !=nullptr){
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+    //split as head and newhead
+    ListNode* newhead = slow->next;
+    slow->next = nullptr;
+    //sort two list
+    head = mergesort(head);
+    newhead = mergesort(newhead);
+    if(newhead == nullptr){
+        return head;
+    }
+    //swap to make head is smaller
+    if(head->val > newhead->val){
+        ListNode *tmp = newhead;
+        newhead = head;
+        head = tmp;
+    }
+    //merge two list
+    ListNode *last = head;
+    while(newhead!=nullptr && last->next!=nullptr){
+        if(last->next->val >= newhead->val){
+            ListNode *tmp = newhead;
+            newhead = newhead->next;
+            tmp->next = last->next;
+            last->next = tmp;
+        }
+        last = last->next;
+    }
+    if(last->next==nullptr){
+        last->next = newhead;
+    }
+    return head;
+}
 
 /*
 2. 给定一个无序数组，求数组中的中位数
@@ -115,7 +116,7 @@ description:
 //         return vec[start_orig];
 //     }
 //     else if(lessorequal_to_firstnode_cnt > findidx + 1){
-//         // 如果太多，则剔除第一个，保留剩下所有的
+//         // 如果太多，则剔除第一个，保留剩下左侧的
 //         return findidxthval(vec, start_orig + 1, start - (vec[start] > vec[start_orig]), findidx);
 //     }
 //     // 如果太少，则使用右侧的
@@ -201,17 +202,22 @@ bool issubset(const vector<int> &s1, const vector<int> &s2){
         else if(s1[idx1] == s2[idx2]){
             ++idx2;
         }
-        else 
         ++idx1;
     }
     return idx2 == s2.size();
 }
+
 int main() {
-    vector<int> vec{1,4,6,7,3,2,5,8,9,7,7,7,7,7,7};
-                 // 1,2,3,4,5,6,7,7,7,7,7,7,7,8,9
-                 // 1,4,4,4,77777777777777777,9,9
-    for(int i = 0;i < vec.size(); ++i){
-        cout<<"i="<<i<<" val="<<findidxthval(vec, 0, vec.size()-1, i)<<endl;
-    }
+    // vector<int> vec{1,4,6,7,3,2,5,8,9,7,7,7,7,7,7};
+    //              // 1,2,3,4,5,6,7,7,7,7,7,7,7,8,9
+    //              // 1,4,4,4,77777777777777777,9,9
+    // for(int i = 0;i < vec.size(); ++i){
+    //     cout<<"i="<<i<<" val="<<findidxthval(vec, 0, vec.size()-1, i)<<endl;
+    // }
+
+    ListNode *p1 = MakeListNode({1,2,3,4,24,34,1,1,1,1,1,1,1,1});
+    ListNode *p3 = mergesort(p1);
+    show(p3);
+    return 0;
 }
 
